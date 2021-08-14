@@ -1,5 +1,5 @@
 {
-  "repository": "project-ar-thunder",
+  "repository": "jad-three-experiments",
   "scripts": {
     "build": "webpack --config ./bundler/webpack.prod.js --env waka",
     "dev": "webpack serve --config ./bundler/webpack.dev.js"

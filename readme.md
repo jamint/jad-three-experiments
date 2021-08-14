@@ -1,4 +1,4 @@
-# Project AR Thunder
+# Jad Three Experiments
 
 ## Setup
 
