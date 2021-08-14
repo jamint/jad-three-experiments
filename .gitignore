@@ -1,0 +1,9 @@
+# npm packages
+**/node_modules
+**/package-lock.json
+
+#dist folder
+**/dist
+
+# Mac OS
+**/.DS_Store
