@@ -12,12 +12,15 @@ import { createOrbitPositionTestSphere } from "./common/test-sphere"
 
 const fov = 30,
   showOrbitTestSphere = true,
-  envMapExposure = 1,
-  directionali1Intensity = 0.8,
-  ambientIntensity = 1,
   directional1Position = [5, 30, 3],
+  // envMapExposure = 0.5,
+  // directionali1Intensity = 0.5,
+  // ambientIntensity = 1,
+  envMapExposure = 0.2,
+  directionali1Intensity = 1,
+  ambientIntensity = 1,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-01.glb"
+  modelSrc = "model-05/model-05.gltf"
 
 let canvas = null,
   scene = null,
@@ -29,7 +32,8 @@ let canvas = null,
   sizes = null,
   delta = 0,
   clock = new THREE.Clock(),
-  camPos = [0, 10, 60]
+  camPos = [-40, 25, 60],
+  controlsPos = [0, 8, 0]
 
 /**
  * Loaders
@@ -80,6 +84,7 @@ const init = () => {
 
   controls = new OrbitControls(camera, canvas)
   controls.enableDamping = true
+  controls.target.set(controlsPos[0], controlsPos[1], controlsPos[2])
   setOrbitControls(controls)
 
   controls.addEventListener("change", (e) => {
@@ -91,20 +96,20 @@ const init = () => {
 }
 
 const loadLights = () => {
-  //   new RGBELoader().setDataType(THREE.UnsignedByteType).load(HDRbg, function (texture) {
-  //     const envMap = pmremGenerator.fromEquirectangular(texture).texture
-  //     scene.environment = envMap
-  //     texture.dispose()
-  //     pmremGenerator.dispose()
-  //     texture.encoding = THREE.RGBEEncoding
-  //     setTimeout(() => {
-  loadModel()
-  //   }, 100)
-  // })
+  new RGBELoader().setDataType(THREE.UnsignedByteType).load(HDRbg, function (texture) {
+    const envMap = pmremGenerator.fromEquirectangular(texture).texture
+    scene.environment = envMap
+    texture.dispose()
+    pmremGenerator.dispose()
+    texture.encoding = THREE.RGBEEncoding
+    setTimeout(() => {
+      loadModel()
+    }, 100)
+  })
 
-  //   const directional1 = new THREE.DirectionalLight("#ffffff", directionali1Intensity)
-  //   directional1.position.set(directional1Position[0], directional1Position[1], directional1Position[2])
-  //   scene.add(directional1)
+  const directional1 = new THREE.DirectionalLight("#ffffff", directionali1Intensity)
+  directional1.position.set(directional1Position[0], directional1Position[1], directional1Position[2])
+  scene.add(directional1)
 
   let ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
   scene.add(ambient)
