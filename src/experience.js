@@ -11,7 +11,7 @@ import { constants, setAssetsLoaded, setThreeScene, setOrbitControls } from "./m
 import { createOrbitPositionTestSphere } from "./common/test-sphere"
 
 const fov = 30,
-  showOrbitTestSphere = true,
+  showOrbitTestSphere = false,
   directional1Position = [5, 30, 3],
   // envMapExposure = 0.5,
   // directionali1Intensity = 0.5,
@@ -20,7 +20,7 @@ const fov = 30,
   directionali1Intensity = 1,
   ambientIntensity = 1,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-05/model-05.gltf"
+  modelSrc = "model-09/model-09.gltf"
 
 let canvas = null,
   scene = null,
@@ -33,7 +33,7 @@ let canvas = null,
   delta = 0,
   clock = new THREE.Clock(),
   camPos = [-40, 25, 60],
-  controlsPos = [0, 8, 0]
+  controlsPos = [5, 8, -5]
 
 /**
  * Loaders
