@@ -20,7 +20,7 @@ const fov = 30,
   directionali1Intensity = 1,
   ambientIntensity = 1,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-09/model-09.gltf"
+  modelSrc = "model-11/model-11.gltf"
 
 let canvas = null,
   scene = null,
