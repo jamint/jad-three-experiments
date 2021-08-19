@@ -50,7 +50,8 @@ const loadingManager = new THREE.LoadingManager(
     sceneReady = true
   },
   (itemUrl, itemsLoaded, itemsTotal) => {
-    // const progressRatio = itemsLoaded / itemsTotal
+    const progressRatio = itemsLoaded / itemsTotal
+    document.querySelector(".progress-text").innerHTML = Math.round(progressRatio * 100) + "%"
   }
 )
 
