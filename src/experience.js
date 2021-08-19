@@ -43,19 +43,27 @@ const stats = new Stats()
 const statsEl = document.querySelector("#stats-container")
 statsEl.appendChild(stats.dom)
 
-let sceneReady = false
+let loadingStarted = false
 const loadingManager = new THREE.LoadingManager(
   () => {
     setAssetsLoaded()
-    sceneReady = true
   },
   (itemUrl, itemsLoaded, itemsTotal) => {
     const progressRatio = itemsLoaded / itemsTotal
+    loadingStarted = true
     document.querySelector(".progress-text").innerHTML = Math.round(progressRatio * 100) + "%"
   }
 )
 
-document.querySelector(".progress-text").innerHTML = "10%"
+let fakeLodingProgress = 0
+const incrementLoading = () => {
+  if (!loadingStarted) {
+    if (fakeLodingProgress < 30) requestAnimationFrame(incrementLoading)
+  }
+  const newNum = fakeLodingProgress++
+  document.querySelector(".progress-text").innerHTML = newNum + "%"
+}
+requestAnimationFrame(incrementLoading)
 
 const init = () => {
   /**
