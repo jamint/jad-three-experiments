@@ -20,7 +20,7 @@ const fov = 30,
   directionali1Intensity = 1,
   ambientIntensity = 1,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-14/model-14.glb"
+  modelSrc = "model-16/model-16.glb"
 
 let canvas = null,
   scene = null,
@@ -54,6 +54,8 @@ const loadingManager = new THREE.LoadingManager(
     document.querySelector(".progress-text").innerHTML = Math.round(progressRatio * 100) + "%"
   }
 )
+
+document.querySelector(".progress-text").innerHTML = "10%"
 
 const init = () => {
   /**
