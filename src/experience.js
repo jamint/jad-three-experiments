@@ -20,7 +20,7 @@ const fov = 30,
   directionali1Intensity = 1,
   ambientIntensity = 1,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-16/model-16.glb"
+  modelSrc = "model/model-24.glb"
 
 let canvas = null,
   scene = null,
@@ -34,6 +34,14 @@ let canvas = null,
   clock = new THREE.Clock(),
   camPos = [-40, 25, 60],
   controlsPos = [5, 8, -5]
+
+let sun = null,
+  earth = null,
+  jupiter = null,
+  mars = null,
+  mercury = null,
+  saturn = null,
+  venus = null
 
 /**
  * Loaders
@@ -145,6 +153,17 @@ const loadModel = () => {
 
     model.position.set(0, 0, 0)
     model.scale.set(3, 3, 3)
+    model.traverse(function (child) {
+      if (child.isMesh && child.geometry) {
+        if (child.name === "Sun") sun = child
+        if (child.name === "Earth") earth = child
+        if (child.name === "Jupiter") jupiter = child
+        if (child.name === "Mars") mars = child
+        if (child.name === "Mercury") mercury = child
+        if (child.name === "Saturn") saturn = child
+        if (child.name === "Venus") venus = child
+      }
+    })
 
     /**
      * Animation
@@ -169,6 +188,14 @@ const tick = () => {
   controls.update()
   renderer.render(scene, camera)
   stats.update()
+
+  sun.rotation.y += 0.001
+  earth.rotation.y -= 0.01
+  jupiter.rotation.y -= 0.01
+  mars.rotation.y -= 0.01
+  mercury.rotation.y -= 0.01
+  saturn.rotation.y -= 0.01
+  venus.rotation.y -= 0.01
 
   // delta = clock.getDelta()
   // if (mixer) mixer.update(delta)
