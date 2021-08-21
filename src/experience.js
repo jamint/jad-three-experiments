@@ -20,7 +20,7 @@ const fov = 30,
   directionali1Intensity = 1,
   ambientIntensity = 1,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model/model-26.glb"
+  modelSrc = "model/model-29.glb"
 
 let canvas = null,
   scene = null,
@@ -41,7 +41,10 @@ let sun = null,
   mars = null,
   mercury = null,
   saturn = null,
-  venus = null
+  venus = null,
+  planets01 = null,
+  planets02 = null,
+  planets03 = null
 
 /**
  * Loaders
@@ -154,14 +157,17 @@ const loadModel = () => {
     model.position.set(0, 0, 0)
     model.scale.set(3, 3, 3)
     model.traverse(function (child) {
+      if (child.name === "Planets01") planets01 = child
+      if (child.name === "Planets02") planets02 = child
+      if (child.name === "Planets03") planets03 = child
       if (child.isMesh && child.geometry) {
         if (child.name === "Sun") sun = child
-        if (child.name === "Earth") earth = child
-        if (child.name === "Jupiter") jupiter = child
-        if (child.name === "Mars") mars = child
-        if (child.name === "Mercury") mercury = child
-        if (child.name === "Saturn") saturn = child
-        if (child.name === "Venus") venus = child
+        // if (child.name === "Earth") earth = child
+        // if (child.name === "Jupiter") jupiter = child
+        // if (child.name === "Mars") mars = child
+        // if (child.name === "Mercury") mercury = child
+        // if (child.name === "Saturn") saturn = child
+        // if (child.name === "Venus") venus = child
       }
     })
 
@@ -189,13 +195,17 @@ const tick = () => {
   renderer.render(scene, camera)
   stats.update()
 
-  sun.rotation.y += 0.001
-  earth.rotation.y -= 0.01
-  jupiter.rotation.y -= 0.01
-  mars.rotation.y -= 0.01
-  mercury.rotation.y -= 0.01
-  saturn.rotation.y -= 0.01
-  venus.rotation.y -= 0.01
+  planets01.rotation.y += 0.0003
+  planets02.rotation.y -= 0.003
+  planets03.rotation.y += 0.002
+
+  sun.rotation.y -= 0.003
+  // earth.rotation.y -= 0.01
+  // jupiter.rotation.y -= 0.01
+  // mars.rotation.y -= 0.01
+  // mercury.rotation.y -= 0.01
+  // saturn.rotation.y -= 0.01
+  // venus.rotation.y -= 0.01
 
   // delta = clock.getDelta()
   // if (mixer) mixer.update(delta)
