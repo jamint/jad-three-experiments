@@ -1,12 +1,13 @@
 import * as THREE from "three"
 import EventBus from "eventing-bus"
+import gsap from "gsap"
 import HDRbg from "../static/hdr_500.hdr"
 import Stats from "stats-js"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader"
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js"
-import { constants, setAssetsLoaded, setThreeScene, setOrbitControls } from "./model"
+import { constants, setAssetsLoaded, setThreeScene, getModel, setModel, setOrbitControls, getCamera, setCamera } from "./model"
 
 import { createOrbitPositionTestSphere } from "./common/test-sphere"
 
@@ -20,7 +21,7 @@ const fov = 30,
   directionali1Intensity = 1,
   ambientIntensity = 1,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model/model-38.glb"
+  modelSrc = "model/model-45.glb"
 
 let canvas = null,
   scene = null,
@@ -44,7 +45,9 @@ let sun = null,
   venus = null,
   planets01 = null,
   planets02 = null,
-  planets03 = null
+  planets03 = null,
+  fanMotor = null,
+  blades = null
 
 /**
  * Loaders
@@ -103,15 +106,16 @@ const init = () => {
   camera = new THREE.PerspectiveCamera(fov, sizes.width / sizes.height, 0.1, 3000)
   camera.position.set(camPos[0], camPos[1], camPos[2])
   scene.add(camera)
+  setCamera(camera)
 
   controls = new OrbitControls(camera, canvas)
   controls.enableDamping = true
   controls.target.set(controlsPos[0], controlsPos[1], controlsPos[2])
   setOrbitControls(controls)
 
-  controls.addEventListener("change", (e) => {
-    EventBus.publish("ORBIT_CHANGED", camera.position)
-  })
+  // controls.addEventListener("change", (e) => {
+  //   EventBus.publish("ORBIT_CHANGED", camera.position)
+  // })
 
   pmremGenerator = new THREE.PMREMGenerator(renderer)
   pmremGenerator.compileEquirectangularShader()
@@ -145,6 +149,34 @@ const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath("draco/")
 
 const loadModel = () => {
+  // Particles
+  const textureLoader = new THREE.TextureLoader()
+  const particleTexture = textureLoader.load("/star-particle.png")
+
+  const particlesGeometry = new THREE.BufferGeometry()
+  const count = 10000
+  const positions = new Float32Array(count * 3)
+
+  for (let i = 0; i < count * 3; i++) {
+    positions[i] = (Math.random() - 0.5) * 300
+  }
+  particlesGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3))
+  const particlesMaterial = new THREE.PointsMaterial()
+  particlesMaterial.size = 0.7
+  particlesMaterial.sizeAttenuation = true
+  particlesMaterial.color = new THREE.Color("#ffffff")
+
+  particlesMaterial.transparent = true
+  particlesMaterial.alphaMap = particleTexture
+  // particlesMaterial.alphaTest = 0.01
+  // // particlesMaterial.depthTest = false
+  // particlesMaterial.depthWrite = false
+  // particlesMaterial.blending = THREE.AdditiveBlending
+  // particlesMaterial.vertexColors = true
+
+  const particles = new THREE.Points(particlesGeometry, particlesMaterial)
+  scene.add(particles)
+
   if (showOrbitTestSphere) createOrbitPositionTestSphere()
 
   const gltfLoader = new GLTFLoader(loadingManager)
@@ -153,6 +185,7 @@ const loadModel = () => {
   gltfLoader.load(modelSrc, (gltf) => {
     let model = gltf.scene
     scene.add(model)
+    setModel(model)
 
     model.position.set(0, 0, 0)
     model.scale.set(3, 3, 3)
@@ -162,12 +195,8 @@ const loadModel = () => {
       if (child.name === "Planets03") planets03 = child
       if (child.isMesh && child.geometry) {
         if (child.name === "Sun") sun = child
-        // if (child.name === "Earth") earth = child
-        // if (child.name === "Jupiter") jupiter = child
-        // if (child.name === "Mars") mars = child
-        // if (child.name === "Mercury") mercury = child
-        // if (child.name === "Saturn") saturn = child
-        // if (child.name === "Venus") venus = child
+        if (child.name === "FanMotor") fanMotor = child
+        if (child.name === "Blades") blades = child
       }
     })
 
@@ -175,13 +204,17 @@ const loadModel = () => {
      * Animation
      */
 
-    if (gltf.animations.length > 0) {
-      mixer = new THREE.AnimationMixer(gltf.scene)
-      scene.add(gltf.scene)
-      gltf.animations.forEach((clip) => {
-        mixer.clipAction(clip).play()
-      })
-    }
+    // if (gltf.animations.length > 0) {
+    //   mixer = new THREE.AnimationMixer(gltf.scene)
+    //   scene.add(gltf.scene)
+    //   gltf.animations.forEach((clip) => {
+    //     mixer.clipAction(clip).play()
+    //   })
+    // }
+
+    gsap.from(getCamera().position, { duration: 2, z: 1000, delay: 0, ease: "power4.out" })
+    gsap.fromTo(getModel().rotation, { y: -0.3 }, { duration: 3, y: 0.4 })
+    gsap.fromTo(fanMotor.rotation, { y: 1.7 }, { duration: 6, y: 0, yoyo: true, repeat: -1, ease: "none" })
   })
 }
 
@@ -200,12 +233,7 @@ const tick = () => {
   planets03.rotation.y += 0.002
 
   sun.rotation.y -= 0.003
-  // earth.rotation.y -= 0.01
-  // jupiter.rotation.y -= 0.01
-  // mars.rotation.y -= 0.01
-  // mercury.rotation.y -= 0.01
-  // saturn.rotation.y -= 0.01
-  // venus.rotation.y -= 0.01
+  blades.rotation.y += 0.15
 
   // delta = clock.getDelta()
   // if (mixer) mixer.update(delta)

@@ -16,8 +16,6 @@ body {
   font-family: "Open Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  // background: #72d9ff;
-  // background: #122228;
   background: black;
 }
 
@@ -60,5 +58,4 @@ a {
   text-decoration: none;
 }
 
-// @import "_index.scss";
 @import "_loading-view.scss";

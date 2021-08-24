@@ -10,11 +10,20 @@ let currScene = 0,
   modelsArr = [],
   threeScene = null,
   camera = null,
+  model = null,
   currHotspot = null,
   orbitControls = null,
   animatedObjectsArr = [],
   guitar = null,
   isMouseOrbitMove = false
+
+export const getModel = () => {
+  return model
+}
+
+export const setModel = (mod) => {
+  model = mod
+}
 
 export const getIsTesting = () => {
   return isTesting
