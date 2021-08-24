@@ -19,7 +19,7 @@ const showOrbitTestSphere = false,
   directionali1Intensity = 1,
   ambientIntensity = 1,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model/model-48.glb"
+  modelSrc = "model/model-50.glb"
 
 let canvas = null,
   fov = null,
@@ -101,7 +101,8 @@ const init = () => {
 
   controls = new OrbitControls(camera, canvas)
   controls.enableDamping = true
-  controls.enableZoom = false
+  controls.enablePan = false
+  // controls.enableZoom = false
   controls.target.set(controlsPos[0], controlsPos[1], controlsPos[2])
   setOrbitControls(controls)
 
@@ -205,6 +206,8 @@ const loadModel = () => {
           controls.maxAzimuthAngle = 0.4
           controls.minPolarAngle = 1
           controls.maxPolarAngle = 1.6
+          controls.minDistance = 55
+          controls.maxDistance = 100
         },
       }
     )
