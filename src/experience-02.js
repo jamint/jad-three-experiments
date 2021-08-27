@@ -16,7 +16,7 @@ const showOrbitTestSphere = false,
   directionali1Intensity = 1,
   ambientIntensity = 1,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-02/model-02-02.glb"
+  modelSrc = "model-02/model-02-03.glb"
 
 let canvas = null,
   fov = null,
@@ -158,14 +158,14 @@ const loadModel = () => {
         duration: 3.2,
         y: 0.4,
         ease: "power4.out",
-        onComplete: () => {
-          controls.minAzimuthAngle = -1.25
-          controls.maxAzimuthAngle = 0.4
-          controls.minPolarAngle = 1
-          controls.maxPolarAngle = 1.6
-          controls.minDistance = 55
-          controls.maxDistance = 100
-        },
+        // onComplete: () => {
+        //   controls.minAzimuthAngle = -1.25
+        //   controls.maxAzimuthAngle = 0.4
+        //   controls.minPolarAngle = 1
+        //   controls.maxPolarAngle = 1.6
+        //   controls.minDistance = 55
+        //   controls.maxDistance = 100
+        // },
       }
     )
   })
