@@ -16,7 +16,7 @@ const showOrbitTestSphere = false,
   directionali1Intensity = 1,
   ambientIntensity = 1,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-01/model-58.glb"
+  modelSrc = "model-01/model-62.glb"
 
 let canvas = null,
   fov = null,
@@ -27,7 +27,10 @@ let canvas = null,
   pmremGenerator = null,
   sizes = null,
   camPos = [-40, 25, 60],
-  controlsPos = [5, 8, -5]
+  controlsPos = [5, 8, -5],
+  delta = 0,
+  clock = new THREE.Clock(),
+  mixer = null
 
 let sun = null,
   planets01 = null,
@@ -35,6 +38,9 @@ let sun = null,
   planets03 = null,
   fanMotor = null,
   blades = null
+
+let blanket = null,
+  blanketAction = null
 
 /**
  * Loaders
@@ -201,6 +207,21 @@ const loadModel = () => {
       }
     )
     gsap.fromTo(fanMotor.rotation, { y: 1.7 }, { duration: 6, y: 0, yoyo: true, repeat: -1, ease: "none" })
+
+    if (gltf.animations.length > 0) {
+      mixer = new THREE.AnimationMixer(gltf.scene)
+
+      console.log(gltf.animations)
+
+      gltf.animations.forEach((clip) => {
+        console.log(clip)
+        mixer.clipAction(clip).play()
+        // if (clip.name === "KeyAction") {
+        //   console.log(clip)
+        //   blanket = clip
+        // }
+      })
+    }
   })
 }
 
@@ -220,6 +241,10 @@ const tick = () => {
 
   sun.rotation.y -= 0.003
   blades.rotation.y += 0.15
+
+  delta = clock.getDelta()
+  if (mixer) mixer.update(delta)
+  // console.log(mixer)
 }
 
 /**
