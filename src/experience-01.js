@@ -16,7 +16,7 @@ const showOrbitTestSphere = false,
   directionali1Intensity = 1,
   ambientIntensity = 1,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-01/model-62.glb"
+  modelSrc = "model-01/model-64.glb"
 
 let canvas = null,
   fov = null,
@@ -197,10 +197,10 @@ const loadModel = () => {
         y: 0.4,
         ease: "power4.out",
         onComplete: () => {
-          controls.minAzimuthAngle = -1.25
-          controls.maxAzimuthAngle = 0.4
+          controls.minAzimuthAngle = -1.22
+          controls.maxAzimuthAngle = 0.38
           controls.minPolarAngle = 1
-          controls.maxPolarAngle = 1.6
+          controls.maxPolarAngle = 1.54
           controls.minDistance = 55
           controls.maxDistance = 100
         },
@@ -244,7 +244,8 @@ const tick = () => {
 
   delta = clock.getDelta()
   if (mixer) mixer.update(delta)
-  // console.log(mixer)
+
+  // console.log(controls.getPolarAngle())
 }
 
 /**
