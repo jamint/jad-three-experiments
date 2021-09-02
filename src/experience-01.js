@@ -46,31 +46,46 @@ let blanket = null,
  * Loaders
  */
 const stats = new Stats()
+let fakeLodingProgress = 0
+let int = null
 
 const statsEl = document.querySelector("#stats-container")
 statsEl.appendChild(stats.dom)
 
-let loadingStarted = false
+// let loadingStarted = false
 const loadingManager = new THREE.LoadingManager(
   () => {
     setAssetsLoaded()
   },
   (itemUrl, itemsLoaded, itemsTotal) => {
     const progressRatio = itemsLoaded / itemsTotal
-    loadingStarted = true
+    // loadingStarted = true
+    clearInterval(int)
     document.querySelector(".progress-text").innerHTML = Math.round(progressRatio * 100) + "%"
   }
 )
-
-let fakeLodingProgress = 0
-const incrementLoading = () => {
-  if (!loadingStarted) {
-    if (fakeLodingProgress < 30) requestAnimationFrame(incrementLoading)
-  }
-  const newNum = fakeLodingProgress++
-  document.querySelector(".progress-text").innerHTML = newNum + "%"
+loadingManager.onStart = () => {
+  int = setInterval(myTimer, 100)
 }
-requestAnimationFrame(incrementLoading)
+
+const myTimer = () => {
+  let random = Math.floor(Math.random() * 2)
+  if (fakeLodingProgress < 80) {
+    if (random === 0) {
+      fakeLodingProgress++
+      document.querySelector(".progress-text").innerHTML = fakeLodingProgress + "%"
+    }
+  }
+}
+
+// const incrementLoading = () => {
+//   if (!loadingStarted) {
+//     if (fakeLodingProgress < 30) requestAnimationFrame(incrementLoading)
+//   }
+//   const newNum = fakeLodingProgress++
+//   document.querySelector(".progress-text").innerHTML = newNum + "%"
+// }
+// requestAnimationFrame(incrementLoading)
 
 /**
  * Init
