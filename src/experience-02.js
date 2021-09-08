@@ -12,14 +12,11 @@ import { createOrbitPositionTestSphere } from "./common/test-sphere"
 
 const showOrbitTestSphere = false,
   directional1Position = [5, 30, 3],
-  // envMapExposure = 0.3,
-  // directionali1Intensity = 1,
-  // ambientIntensity = 1,
   envMapExposure = 1.2,
   directionali1Intensity = 0,
   ambientIntensity = 0,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-02/model-02-14.glb"
+  modelSrc = "model-02/model-02-30.glb"
 
 let canvas = null,
   fov = null,

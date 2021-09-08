@@ -4,19 +4,42 @@ const MiniCSSExtractPlugin = require("mini-css-extract-plugin")
 const path = require("path")
 
 module.exports = {
-  entry: path.resolve(__dirname, "../src/app.js"),
+  entry: {
+    index: "./src/app.js",
+    experience01: "./src/exp-01.js",
+    experience02: "./src/exp-02.js",
+  },
   output: {
-    filename: "bundle.js",
+    filename: "[name].js",
     path: path.resolve(__dirname, "../dist"),
   },
   devtool: "source-map",
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+    },
+  },
   plugins: [
     new CopyWebpackPlugin({
       patterns: [{ from: path.resolve(__dirname, "../static") }],
     }),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, "../src/index.html"),
-      minify: true,
+      inject: true,
+      filename: "index.html",
+      template: "./src/index.html",
+      chunks: ["index"],
+    }),
+    new HtmlWebpackPlugin({
+      inject: true,
+      filename: "experience-01.html",
+      template: "./src/experience-01.html",
+      chunks: ["experience01"],
+    }),
+    new HtmlWebpackPlugin({
+      inject: true,
+      filename: "experience-02.html",
+      template: "./src/experience-02.html",
+      chunks: ["experience02"],
     }),
     new MiniCSSExtractPlugin(),
   ],
