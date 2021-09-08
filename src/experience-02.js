@@ -19,7 +19,7 @@ const showOrbitTestSphere = false,
   directionali1Intensity = 0,
   ambientIntensity = 0,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-02/model-02-08.glb"
+  modelSrc = "model-02/model-02-14.glb"
 
 let canvas = null,
   fov = null,
