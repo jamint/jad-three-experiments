@@ -3,11 +3,15 @@ const HtmlWebpackPlugin = require("html-webpack-plugin")
 const MiniCSSExtractPlugin = require("mini-css-extract-plugin")
 const path = require("path")
 
+console.log('hi...')
+
 module.exports = {
   entry: {
     index: "./src/app.js",
     experience01: "./src/exp-01.js",
     experience02: "./src/exp-02.js",
+    experience03: "./src/exp-03.js",
+    experience04: "./src/exp-04.js",
   },
   output: {
     filename: "[name].js",
@@ -40,6 +44,18 @@ module.exports = {
       filename: "experience-02.html",
       template: "./src/experience-02.html",
       chunks: ["experience02"],
+    }),
+    new HtmlWebpackPlugin({
+      inject: true,
+      filename: "experience-03.html",
+      template: "./src/experience-03.html",
+      chunks: ["experience03"],
+    }),
+    new HtmlWebpackPlugin({
+      inject: true,
+      filename: "experience-04.html",
+      template: "./src/experience-04.html",
+      chunks: ["experience04"],
     }),
     new MiniCSSExtractPlugin(),
   ],
