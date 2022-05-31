@@ -195,7 +195,7 @@ const loadModel = () => {
     setModel(model)
 
     model.position.set(0, 0, 0)
-    model.scale.set(3, 3, 3)
+    // model.scale.set(3, 3, 3)
     model.traverse(function (child) {
       child.castShadow=true;
       child.receiveShadow=true;
