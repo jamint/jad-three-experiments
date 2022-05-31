@@ -27,8 +27,10 @@ let canvas = null,
   controls = null,
   pmremGenerator = null,
   sizes = null,
-  camPos = [-40, 25, 60],
-  controlsPos = [5, 8, -5],
+  // camPos = [-40, 25, 60],
+  camPos = [0, 2, 0],
+  // controlsPos = [5, 8, -5],
+  controlsPos = [0, 1.8, -1],
   delta = 0,
   clock = new THREE.Clock(),
   mixer = null
@@ -214,24 +216,24 @@ const loadModel = () => {
      * Animation
      */
 
-    gsap.from(getCamera().position, { duration: 2, z: 1000, delay: 0, ease: "power4.out" })
-    gsap.fromTo(
-      getModel().rotation,
-      { y: -0.3 },
-      {
-        duration: 3.2,
-        y: 0.4,
-        ease: "power4.out",
-        onComplete: () => {
-          controls.minAzimuthAngle = -1.22
-          controls.maxAzimuthAngle = 0.38
-          controls.minPolarAngle = 1
-          controls.maxPolarAngle = 1.54
-          controls.minDistance = 55
-          controls.maxDistance = 100
-        },
-      }
-    )
+    // gsap.from(getCamera().position, { duration: 2, z: 1000, delay: 0, ease: "power4.out" })
+    // gsap.fromTo(
+    //   getModel().rotation,
+    //   { y: -0.3 },
+    //   {
+    //     duration: 3.2,
+    //     y: 0.4,
+    //     ease: "power4.out",
+    //     onComplete: () => {
+    //       controls.minAzimuthAngle = -1.22
+    //       controls.maxAzimuthAngle = 0.38
+    //       controls.minPolarAngle = 1
+    //       controls.maxPolarAngle = 1.54
+    //       controls.minDistance = 55
+    //       controls.maxDistance = 100
+    //     },
+    //   }
+    // )
     // gsap.fromTo(fanMotor.rotation, { y: 1.7 }, { duration: 6, y: 0, yoyo: true, repeat: -1, ease: "none" })
 
     if (gltf.animations.length > 0) {
