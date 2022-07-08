@@ -11,13 +11,14 @@ import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js"
 import { constants, setAssetsLoaded, setThreeScene, getModel, setModel, setOrbitControls, getCamera, setCamera } from "./model"
 import { createOrbitPositionTestSphere } from "./common/test-sphere"
 
-const showOrbitTestSphere = false,
+const textureLoader = new THREE.TextureLoader(),
+  showOrbitTestSphere = false,
   directional1Position = [1, 20, 3],
   directionali1Intensity = 1,
   envMapExposure = 0.4,
   ambientIntensity = 0.2,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-04/model-04-a.gltf"
+  modelSrc = "model-04/model-04-a.glb"
 
 let canvas = null,
   fov = null,
@@ -31,7 +32,8 @@ let canvas = null,
   controlsPos = [0, 1.8, -1],
   delta = 0,
   clock = new THREE.Clock(),
-  mixer = null
+  mixer = null,
+  deck05 = null
 
 let blanket = null,
   blanketAction = null
@@ -120,9 +122,9 @@ const loadLights = () => {
     texture.dispose()
     pmremGenerator.dispose()
     texture.encoding = THREE.RGBEEncoding
-    // setTimeout(() => {
+    setTimeout(() => {
       loadModel()
-    // }, 100)
+    }, 100)
   })
 
   const directional1 = new THREE.DirectionalLight("#ffffff", directionali1Intensity)
@@ -157,7 +159,7 @@ dracoLoader.setDecoderPath("draco/")
 
 const loadModel = () => {
   // // Particles
-  // const textureLoader = new THREE.TextureLoader(),
+  // const textureLoader = new THREE.TextureLoader()
   //   particleTexture = textureLoader.load("/star-particle.png"),
   //   particlesGeometry = new THREE.BufferGeometry(),
   //   count = 10000,
@@ -184,25 +186,32 @@ const loadModel = () => {
 
   gltfLoader.load(modelSrc, (gltf) => {
     let model = gltf.scene
+    
     scene.add(model)
     setModel(model)
 
     model.position.set(0, 0, 0)
     // model.scale.set(3, 3, 3)
+
+    // map.encoding = THREE.sRGBEncoding;
+    // map.flipY = false;
+
     model.traverse(function (child) {
-      child.castShadow=true;
-      child.receiveShadow=true;
-      // console.log(child);
-    //   if (child.name === "Planets01") planets01 = child
-    //   if (child.name === "Planets02") planets02 = child
-    //   if (child.name === "Planets03") planets03 = child
-    //   if (child.isMesh && child.geometry) {
-    //     if (child.name === "Sun") sun = child
-    //     if (child.name === "FanMotor") fanMotor = child
-    //     if (child.name === "Blades") blades = child
-    //   }
+      child.castShadow = true;
+      child.receiveShadow = true;
+      
+      if(child.name==="Deck-01") {
+        deck05 = child
+        const newThing = deck05.clone()
+        scene.add(newThing)
+        newThing.position.x = 1.2
+        createNewMaterial(deck05, "model-04/textures/board-05-i-back-color.jpg")
+        createNewMaterial(newThing, "model-04/textures/board-05-j-back-color.jpg")
+      }
     })
 
+
+    // var newMaterial = new THREE.MeshStandardMaterial({color: 0xff0000});
     /**
      * Animation
      */
@@ -242,6 +251,19 @@ const loadModel = () => {
       })
     }
   })
+}
+
+const createNewMaterial = (obj, img) => {
+  var map =  textureLoader.load(img,
+  function(texture) {
+    const material = new THREE.MeshBasicMaterial( {
+      map: texture
+    });
+    texture.encoding = THREE.sRGBEncoding;
+    texture.flipY = false;
+    obj.material=material
+    }
+  );
 }
 
 /**
