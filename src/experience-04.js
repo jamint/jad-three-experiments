@@ -14,10 +14,10 @@ import { createOrbitPositionTestSphere } from "./common/test-sphere"
 const showOrbitTestSphere = false,
   directional1Position = [1, 20, 3],
   directionali1Intensity = 1,
-  envMapExposure = 0.3,
+  envMapExposure = 0.4,
   ambientIntensity = 0.2,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-04/model-04-a.glb"
+  modelSrc = "model-04/model-04-a.gltf"
 
 let canvas = null,
   fov = null,
@@ -27,9 +27,7 @@ let canvas = null,
   controls = null,
   pmremGenerator = null,
   sizes = null,
-  // camPos = [-40, 25, 60],
-  camPos = [0, 2, 4],
-  // controlsPos = [5, 8, -5],
+  camPos = [0, 2, 10],
   controlsPos = [0, 1.8, -1],
   delta = 0,
   clock = new THREE.Clock(),
@@ -122,9 +120,9 @@ const loadLights = () => {
     texture.dispose()
     pmremGenerator.dispose()
     texture.encoding = THREE.RGBEEncoding
-    setTimeout(() => {
+    // setTimeout(() => {
       loadModel()
-    }, 100)
+    // }, 100)
   })
 
   const directional1 = new THREE.DirectionalLight("#ffffff", directionali1Intensity)
