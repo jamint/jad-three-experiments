@@ -41,7 +41,9 @@ let canvas = null,
   delta = 0,
   clock = new THREE.Clock(),
   deck05 = null,
-  model = null
+  model = null,
+  secondHand = null,
+  minuteHand = null
 
 /**
  * Loaders
@@ -199,14 +201,19 @@ const loadModel = () => {
     model.traverse(function (child) {
       child.castShadow = true
       child.receiveShadow = true
-
-      if (child.name === "Deck") {
-        deck05 = child
-        const newThing = deck05.clone()
-        scene.add(newThing)
-        newThing.position.x = 1.2
-        createBoard(deck05, "model-04/textures/board-05-i-back-color.jpg")
-        createBoard(newThing, "model-04/textures/board-05-j-back-color.jpg")
+      //   if (child.name === "Deck") {
+      //     deck05 = child
+      //     const newThing = deck05.clone()
+      //     scene.add(newThing)
+      //     newThing.position.x = 1.2
+      //     createBoard(deck05, "model-04/textures/board-05-i-back-color.jpg")
+      //     createBoard(newThing, "model-04/textures/board-05-j-back-color.jpg")
+      //   }
+      if (child.name === "SecondHand") {
+        secondHand = child
+      }
+      if (child.name === "MinuteHand") {
+        minuteHand = child
       }
     })
   })
@@ -234,6 +241,9 @@ const tick = () => {
   stats.update()
   delta = clock.getDelta()
   //   model.rotation.y += 0.001
+  secondHand.rotation.z -= 0.001
+  minuteHand.rotation.z -= 0.00002
+  console.log(secondHand)
   renderer.render(scene, camera)
 }
 
