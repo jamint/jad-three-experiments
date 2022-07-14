@@ -3,7 +3,7 @@ import EventBus from "eventing-bus"
 import gsap from "gsap"
 import HDRbg from "../static/hdr_500.hdr"
 import Stats from "stats-js"
-import { VRButton } from "three/examples/jsm/webxr/VRButton.js"
+// import { VRButton } from "three/examples/jsm/webxr/VRButton.js"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader"
@@ -38,12 +38,10 @@ let canvas = null,
   sizes = null,
   camPos = [0, 0, 15],
   controlsPos = [0, 0, 0],
-  delta = 0,
-  clock = new THREE.Clock(),
-  deck05 = null,
   model = null,
   secondHand = null,
-  minuteHand = null
+  minuteHand = null,
+  cameraGroup = null
 
 /**
  * Loaders
@@ -85,7 +83,6 @@ const myTimer = () => {
 /**
  * Init
  */
-
 const init = () => {
   sizes = {
     width: canvasContainer.getBoundingClientRect().width,
@@ -110,8 +107,11 @@ const init = () => {
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = envMapExposure
 
-  document.body.appendChild(VRButton.createButton(renderer))
-  renderer.xr.enabled = true
+  // document.body.appendChild(VRButton.createButton(renderer))
+  // renderer.xr.enabled = true
+
+  cameraGroup = new THREE.Group()
+  scene.add(cameraGroup)
 
   fov = window.innerWidth < 600 ? 45 : 30
   camera = new THREE.PerspectiveCamera(
@@ -121,14 +121,14 @@ const init = () => {
     3000
   )
   camera.position.set(camPos[0], camPos[1], camPos[2])
-  scene.add(camera)
+  cameraGroup.add(camera)
   setCamera(camera)
 
-  controls = new OrbitControls(camera, canvas)
-  controls.enableDamping = true
-  controls.enablePan = false
-  controls.target.set(controlsPos[0], controlsPos[1], controlsPos[2])
-  setOrbitControls(controls)
+  // controls = new OrbitControls(camera, canvas)
+  // controls.enableDamping = true
+  // controls.enablePan = false
+  // controls.target.set(controlsPos[0], controlsPos[1], controlsPos[2])
+  // setOrbitControls(controls)
 
   pmremGenerator = new THREE.PMREMGenerator(renderer)
   pmremGenerator.compileEquirectangularShader()
@@ -159,22 +159,22 @@ const loadLights = () => {
   )
   directional1.shadow.bias = -0.0004
   directional1.castShadow = true
-  const helper = new THREE.DirectionalLightHelper(directional1, 5)
-  scene.add(helper)
-  scene.add(directional1)
+  // const helper = new THREE.DirectionalLightHelper(directional1, 5)
+  // scene.add(helper)
+  // scene.add(directional1)
 
   const ambientIntensity = 0.1,
     ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
   scene.add(ambient)
 
-  //   const pointLight1 = createPointLight(0.2)
-  //   const pointLight2 = createPointLight(0.2)
-  //   const pointLight3 = createPointLight(0.2)
-  //   const pointLight4 = createPointLight(0.2)
-  //   pointLight1.position.set(2, 4, -3)
-  //   pointLight2.position.set(-2, 4, -3)
-  //   pointLight3.position.set(2, 4, 3)
-  //   pointLight4.position.set(-2, 4, 3)
+  // const pointLight1 = createPointLight(0.2)
+  // const pointLight2 = createPointLight(0.2)
+  // const pointLight3 = createPointLight(0.2)
+  // const pointLight4 = createPointLight(0.2)
+  // pointLight1.position.set(2, 4, -3)
+  // pointLight2.position.set(-2, 4, -3)
+  // pointLight3.position.set(2, 4, 3)
+  // pointLight4.position.set(-2, 4, 3)
 }
 
 /**
@@ -196,19 +196,11 @@ const loadModel = () => {
 
     model.position.set(0, 0, 0)
     model.rotation.x = -0.2
-    // model.rotation.z = 0.05
 
     model.traverse(function (child) {
       child.castShadow = true
       child.receiveShadow = true
-      //   if (child.name === "Deck") {
-      //     deck05 = child
-      //     const newThing = deck05.clone()
-      //     scene.add(newThing)
-      //     newThing.position.x = 1.2
-      //     createBoard(deck05, "model-04/textures/board-05-i-back-color.jpg")
-      //     createBoard(newThing, "model-04/textures/board-05-j-back-color.jpg")
-      //   }
+
       if (child.name === "SecondHand") {
         secondHand = child
       }
@@ -219,32 +211,35 @@ const loadModel = () => {
   })
 }
 
-const createBoard = (obj, img) => {
-  var map = textureLoader.load(img, function (texture) {
-    const material = new THREE.MeshBasicMaterial({
-      map: texture,
-    })
-    texture.encoding = THREE.sRGBEncoding
-    texture.flipY = false
-    obj.material = material
-  })
-}
-
 /**
  * Tick
  */
 
+const clock = new THREE.Clock()
+let previousTime = 0
+
 const tick = () => {
-  window.requestAnimationFrame(tick)
-  controls.update()
+  const elapsedTime = clock.getElapsedTime()
+  const deltaTime = elapsedTime - previousTime
+  previousTime = elapsedTime
+
+  // controls.update()
   renderer.render(scene, camera)
   stats.update()
-  delta = clock.getDelta()
-  //   model.rotation.y += 0.001
+
   secondHand.rotation.z -= 0.001
   minuteHand.rotation.z -= 0.00002
-  console.log(secondHand)
+
+  const parallaxX = cursor.x * 0.6
+  const parallaxY = -cursor.y * 0.6
+  cameraGroup.position.x += (parallaxX - cameraGroup.position.x) * 5 * deltaTime
+  cameraGroup.position.y += (parallaxY - cameraGroup.position.y) * 5 * deltaTime
+
+  cameraGroup.rotation.y += (parallaxX - cameraGroup.position.x) * 8 * deltaTime
+  cameraGroup.rotation.x -= (parallaxY - cameraGroup.position.y) * 2 * deltaTime
+
   renderer.render(scene, camera)
+  window.requestAnimationFrame(tick)
 }
 
 /**
@@ -286,5 +281,17 @@ const handleAssetsLoaded = () => {
   //     // renderer.render( scene, camera );
   //   })
 }
+
+/**
+ * Cursor
+ */
+const cursor = {}
+cursor.x = 0
+cursor.y = 0
+
+window.addEventListener("mousemove", (event) => {
+  cursor.x = event.clientX / sizes.width - 0.5
+  cursor.y = event.clientY / sizes.height - 0.5
+})
 
 EventBus.on(constants.ASSETS_LOADED, handleAssetsLoaded)
