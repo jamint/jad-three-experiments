@@ -26,7 +26,7 @@ const textureLoader = new THREE.TextureLoader(),
   directionali1Intensity = 0.3,
   envMapExposure = 0.4,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-05/watches-01.glb"
+  modelSrc = "model-05/watches-01-b.glb"
 
 let canvas = null,
   fov = null,
@@ -36,12 +36,12 @@ let canvas = null,
   controls = null,
   pmremGenerator = null,
   sizes = null,
-  camPos = [0, 0, 10],
-  //   camPos = [0, 2, 20],
+  camPos = [0, 0, 15],
   controlsPos = [0, 0, 0],
   delta = 0,
   clock = new THREE.Clock(),
-  deck05 = null
+  deck05 = null,
+  model = null
 
 /**
  * Loaders
@@ -105,7 +105,6 @@ const init = () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.setSize(sizes.width, sizes.height)
   renderer.setClearColor(0xbbdbc1, 0)
-  //   renderer.setClearColor(0xffffff, 1)
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = envMapExposure
 
@@ -188,12 +187,14 @@ const loadModel = () => {
   gltfLoader.setDRACOLoader(dracoLoader)
 
   gltfLoader.load(modelSrc, (gltf) => {
-    let model = gltf.scene
+    model = gltf.scene
 
     scene.add(model)
     setModel(model)
 
     model.position.set(0, 0, 0)
+    model.rotation.x = -0.2
+    // model.rotation.z = 0.05
 
     model.traverse(function (child) {
       child.castShadow = true
@@ -232,6 +233,7 @@ const tick = () => {
   renderer.render(scene, camera)
   stats.update()
   delta = clock.getDelta()
+  //   model.rotation.y += 0.001
   renderer.render(scene, camera)
 }
 
@@ -264,15 +266,15 @@ const handleAssetsLoaded = () => {
   window.addEventListener("resize", handleResize)
   handleResize()
 
-  renderer.setAnimationLoop(function () {
-    // // console.log('anim loop');
-    // window.requestAnimationFrame(tick)
-    // controls.update()
-    // renderer.render(scene, camera)
-    // stats.update()
-    // delta = clock.getDelta()
-    // renderer.render( scene, camera );
-  })
+  //   renderer.setAnimationLoop(function () {
+  //     // // console.log('anim loop');
+  //     // window.requestAnimationFrame(tick)
+  //     // controls.update()
+  //     // renderer.render(scene, camera)
+  //     // stats.update()
+  //     // delta = clock.getDelta()
+  //     // renderer.render( scene, camera );
+  //   })
 }
 
 EventBus.on(constants.ASSETS_LOADED, handleAssetsLoaded)
