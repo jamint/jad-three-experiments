@@ -245,7 +245,7 @@ const loadModel = () => {
     const day = days[new Date().getDay()]
     const month = months[new Date().getMonth()]
 
-    addText(modelGroup, days[5], {
+    addText(modelGroup, day, {
       x: -0.387,
       y: 0.02,
       z: 1.3,
