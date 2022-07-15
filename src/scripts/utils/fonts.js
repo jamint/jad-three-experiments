@@ -4,7 +4,7 @@ const textureLoader = new THREE.TextureLoader()
 const matcapTexture = textureLoader.load("textures/matcaps/8.png"),
   fontLoader = new THREE.FontLoader()
 
-export const addText = (obj, txt) => {
+export const addText = (obj, txt, pos) => {
   fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
     // const material = new THREE.MeshStandardMaterial({ matcap: matcapTexture })
     const material = new THREE.MeshStandardMaterial()
@@ -24,9 +24,9 @@ export const addText = (obj, txt) => {
     })
     textGeometry.center()
     const text = new THREE.Mesh(textGeometry, material)
-    text.position.x = 0.41
-    text.position.y = 0.02
-    text.position.z = 1.3
+    text.position.x = pos.x
+    text.position.y = pos.y
+    text.position.z = pos.z
     obj.add(text)
   })
 }

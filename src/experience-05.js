@@ -27,7 +27,21 @@ const textureLoader = new THREE.TextureLoader(),
   envMapExposure = 0.4,
   canvasContainer = document.querySelector(".canvas-container"),
   modelSrc = "model-05/watches-01-b.glb",
-  modelGroup = new THREE.Group()
+  modelGroup = new THREE.Group(),
+  months = [
+    "JAN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAY",
+    "JUN",
+    "JUL",
+    "AUG",
+    "SEP",
+    "OCT",
+    "NOV",
+    "DEC",
+  ]
 
 let canvas = null,
   fov = null,
@@ -48,7 +62,6 @@ let canvas = null,
 /**
  * Loaders
  */
-
 const stats = new Stats()
 let fakeLodingProgress = 0,
   int = null
@@ -188,7 +201,6 @@ const loadLights = () => {
 /**
  * Model
  */
-
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath("draco/")
 
@@ -222,7 +234,19 @@ const loadModel = () => {
       }
     })
     startClock()
-    addText(modelGroup, String(new Date().getDate()))
+    const date = String(new Date().getDate())
+    addText(modelGroup, date, {
+      x: 0.45,
+      y: 0.02,
+      z: 1.3,
+    })
+    const month = months[new Date().getMonth()]
+
+    addText(modelGroup, month, {
+      x: -0.387,
+      y: 0.02,
+      z: 1.3,
+    })
 
     let duration = 1.7
     gsap.from(modelGroup.position, {
@@ -248,7 +272,6 @@ const loadModel = () => {
 /**
  * Tick
  */
-
 const clock = new THREE.Clock()
 let previousTime = 0
 let speedPosY = 0,
@@ -343,7 +366,6 @@ const setTime = () => {
   const percOfHour = current.getMinutes() / 60
 
   secondHand.rotation.z = -Math.PI * 2 * (current.getSeconds() / 60)
-  // minuteHand.rotation.z = -current.getMinutes() * minuteTickDistance
   minuteHand.rotation.z =
     -current.getMinutes() * minuteTickDistance -
     minuteTickDistance * percOfMinute
