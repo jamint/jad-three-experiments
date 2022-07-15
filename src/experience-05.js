@@ -3,15 +3,11 @@ import EventBus from "eventing-bus"
 import gsap from "gsap"
 import HDRbg from "../static/hdr_500.hdr"
 import Stats from "stats-js"
-// import typefaceFont from "three/examples/fonts/helvetiker_regular.typeface.json"
-// import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js"
-// import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js"
-// import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js"
-// import { VRButton } from "three/examples/jsm/webxr/VRButton.js"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader"
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js"
+import { addText } from "./scripts/utils/fonts"
 import {
   constants,
   setAssetsLoaded,
@@ -27,10 +23,11 @@ import { createPointLight } from "./scripts/utils/lights"
 
 const textureLoader = new THREE.TextureLoader(),
   directional1Position = [1, 20, 3],
-  directionali1Intensity = 0.3,
+  directionali1Intensity = 1,
   envMapExposure = 0.4,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-05/watches-01-b.glb"
+  modelSrc = "model-05/watches-01-b.glb",
+  modelGroup = new THREE.Group()
 
 let canvas = null,
   fov = null,
@@ -132,7 +129,7 @@ const init = () => {
   controls = new OrbitControls(camera, canvas)
   controls.enableDamping = true
   controls.enablePan = false
-  // controls.enableZoom = false
+  controls.enableZoom = false
   // controls.target.set(controlsPos[0], controlsPos[1], controlsPos[2])
   controls.minAzimuthAngle = -1
   controls.maxAzimuthAngle = 1
@@ -173,19 +170,19 @@ const loadLights = () => {
   // scene.add(helper)
   // scene.add(directional1)
 
-  const ambientIntensity = 0.1,
-    ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
-  scene.add(ambient)
+  // const ambientIntensity = 0.3,
+  //   ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
+  // scene.add(ambient)
 
-  const inten = 0.1
-  const pointLight1 = createPointLight(inten)
-  const pointLight2 = createPointLight(inten)
-  const pointLight3 = createPointLight(inten)
-  const pointLight4 = createPointLight(inten)
-  pointLight1.position.set(4, -4, -2)
-  pointLight2.position.set(-4, 4, -2)
-  pointLight3.position.set(4, 4, 6)
-  pointLight4.position.set(-4, -4, 6)
+  // const inten = 0.1
+  // const pointLight1 = createPointLight(inten)
+  // const pointLight2 = createPointLight(inten)
+  // const pointLight3 = createPointLight(inten)
+  // const pointLight4 = createPointLight(inten)
+  // pointLight1.position.set(4, -4, -2)
+  // pointLight2.position.set(-4, 4, -2)
+  // pointLight3.position.set(4, 4, 6)
+  // pointLight4.position.set(-4, -4, 6)
 }
 
 /**
@@ -202,12 +199,13 @@ const loadModel = () => {
   gltfLoader.load(modelSrc, (gltf) => {
     model = gltf.scene
 
-    scene.add(model)
+    scene.add(modelGroup)
+    modelGroup.add(model)
     setModel(model)
 
-    model.position.set(0, 0, 0)
-    model.rotation.x = -0.1
-    model.rotation.y = 0.1
+    modelGroup.position.set(0, 0, 0)
+    modelGroup.rotation.x = -0.1
+    modelGroup.rotation.y = 0.1
 
     model.traverse(function (child) {
       child.castShadow = true
@@ -224,12 +222,25 @@ const loadModel = () => {
       }
     })
     startClock()
-    gsap.from(model.position, { duration: 1, x: -10, delay: 0.5 })
-    gsap.from(model.scale, { duration: 1, x: 0.1, y: 0.1, z: 0.1, delay: 0.5 })
-    gsap.from(model.rotation, {
-      duration: 1,
+    addText(modelGroup, String(new Date().getDate()))
+
+    let duration = 1.7
+    gsap.from(modelGroup.position, {
+      duration,
+      x: -10,
+      ease: "power4.out",
+    })
+    gsap.from(modelGroup.scale, {
+      duration: (duration += 0.5),
+      x: 0.1,
+      y: 0.1,
+      z: 0.1,
+      ease: "power4.out",
+    })
+    gsap.from(modelGroup.rotation, {
+      duration,
       y: -Math.PI * 2,
-      delay: 0.5,
+      ease: "power4.out",
     })
   })
 }
@@ -240,6 +251,8 @@ const loadModel = () => {
 
 const clock = new THREE.Clock()
 let previousTime = 0
+let speedPosY = 0,
+  speedRotY = 0
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime()
@@ -251,16 +264,25 @@ const tick = () => {
   renderer.render(scene, camera)
   stats.update()
 
-  // secondHand.rotation.z -= 0.001
-  // minuteHand.rotation.z -= 0.00002
+  // const parallaxX = cursor.x * 0.1
+  // const parallaxY = -cursor.y * 0.1
 
-  const parallaxX = cursor.x * 0.6
-  const parallaxY = -cursor.y * 0.6
-  cameraGroup.position.x += (parallaxX - cameraGroup.position.x) * 5 * deltaTime
-  cameraGroup.position.y += (parallaxY - cameraGroup.position.y) * 5 * deltaTime
+  //   modelGroup.position.y += Math.sin(deltaTime * Math.PI) * 0.01
+  const distPosY = 0.04
+  const distRotY = 0.1
+  //   this.x += speed * Math.sin(this.angle);
 
-  // cameraGroup.rotation.y += (parallaxX - cameraGroup.position.x) * 8 * deltaTime
-  // cameraGroup.rotation.x -= (parallaxY - cameraGroup.position.y) * 2 * deltaTime
+  modelGroup.position.y = distPosY * Math.cos(speedPosY)
+  modelGroup.rotation.y = distRotY * Math.cos(speedRotY)
+
+  speedPosY += 0.01
+  speedRotY += 0.005
+
+  // modelGroup.position.x -= (parallaxX - cameraGroup.position.x) * 2 * deltaTime
+  // modelGroup.position.y -= (parallaxY - cameraGroup.position.y) * 2 * deltaTime
+
+  // modelGroup.rotation.y -= (parallaxX - cameraGroup.position.x) * 8 * deltaTime
+  // modelGroup.rotation.x += (parallaxY - cameraGroup.position.y) * 2 * deltaTime
 
   renderer.render(scene, camera)
   window.requestAnimationFrame(tick)
@@ -284,7 +306,6 @@ const handleResize = () => {
 /**
  * Initialization
  */
-
 setTimeout(() => {
   init()
   loadLights()
@@ -294,16 +315,6 @@ const handleAssetsLoaded = () => {
   tick()
   window.addEventListener("resize", handleResize)
   handleResize()
-
-  //   renderer.setAnimationLoop(function () {
-  //     // // console.log('anim loop');
-  //     // window.requestAnimationFrame(tick)
-  //     // controls.update()
-  //     // renderer.render(scene, camera)
-  //     // stats.update()
-  //     // delta = clock.getDelta()
-  //     // renderer.render( scene, camera );
-  //   })
 }
 
 /**
@@ -328,26 +339,21 @@ const setTime = () => {
     minuteTickDistance = (Math.PI * 2) / 60,
     hourTickDistance = (Math.PI * 2) / 12
 
-  // const percOfMinute = current.getMinutes() / 60
+  const percOfMinute = current.getSeconds() / 60
+  const percOfHour = current.getMinutes() / 60
 
   secondHand.rotation.z = -Math.PI * 2 * (current.getSeconds() / 60)
-  minuteHand.rotation.z = -current.getMinutes() * minuteTickDistance
-  hourHand.rotation.z = -current.getHours() * hourTickDistance
-
-  console.log(current.getMinutes())
+  // minuteHand.rotation.z = -current.getMinutes() * minuteTickDistance
+  minuteHand.rotation.z =
+    -current.getMinutes() * minuteTickDistance -
+    minuteTickDistance * percOfMinute
+  hourHand.rotation.z =
+    -current.getHours() * hourTickDistance - hourTickDistance * percOfHour
 }
+
 const startClock = () => {
   setInterval(() => {
     setTime()
   }, 1000)
-  // setTime()
+  setTime()
 }
-
-/**
- * Fonts
- */
-// const fontLoader = new FontLoader()
-
-// fontLoader.load(typefaceFont, (font) => {
-//   console.log("loaded")
-// })
