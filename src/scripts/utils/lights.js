@@ -9,7 +9,7 @@ export const createPointLight = (intensity) => {
   pointLight.shadow.mapSize.height = 1024
   getThreeScene().add(pointLight)
   const sphereSize = 0.5
-  const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize)
-  getThreeScene().add(pointLightHelper)
+  // const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize)
+  // getThreeScene().add(pointLightHelper)
   return pointLight
 }

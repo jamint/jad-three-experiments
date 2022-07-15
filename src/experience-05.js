@@ -3,6 +3,10 @@ import EventBus from "eventing-bus"
 import gsap from "gsap"
 import HDRbg from "../static/hdr_500.hdr"
 import Stats from "stats-js"
+// import typefaceFont from "three/examples/fonts/helvetiker_regular.typeface.json"
+// import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js"
+// import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js"
+// import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js"
 // import { VRButton } from "three/examples/jsm/webxr/VRButton.js"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
@@ -36,11 +40,12 @@ let canvas = null,
   controls = null,
   pmremGenerator = null,
   sizes = null,
-  camPos = [0, 0, 15],
+  camPos = [0, 0, 12],
   controlsPos = [0, 0, 0],
   model = null,
   secondHand = null,
   minuteHand = null,
+  hourHand = null,
   cameraGroup = null
 
 /**
@@ -124,11 +129,16 @@ const init = () => {
   cameraGroup.add(camera)
   setCamera(camera)
 
-  // controls = new OrbitControls(camera, canvas)
-  // controls.enableDamping = true
-  // controls.enablePan = false
+  controls = new OrbitControls(camera, canvas)
+  controls.enableDamping = true
+  controls.enablePan = false
+  // controls.enableZoom = false
   // controls.target.set(controlsPos[0], controlsPos[1], controlsPos[2])
-  // setOrbitControls(controls)
+  controls.minAzimuthAngle = -1
+  controls.maxAzimuthAngle = 1
+  controls.minPolarAngle = 1.1
+  controls.maxPolarAngle = 1.8
+  setOrbitControls(controls)
 
   pmremGenerator = new THREE.PMREMGenerator(renderer)
   pmremGenerator.compileEquirectangularShader()
@@ -167,14 +177,15 @@ const loadLights = () => {
     ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
   scene.add(ambient)
 
-  // const pointLight1 = createPointLight(0.2)
-  // const pointLight2 = createPointLight(0.2)
-  // const pointLight3 = createPointLight(0.2)
-  // const pointLight4 = createPointLight(0.2)
-  // pointLight1.position.set(2, 4, -3)
-  // pointLight2.position.set(-2, 4, -3)
-  // pointLight3.position.set(2, 4, 3)
-  // pointLight4.position.set(-2, 4, 3)
+  const inten = 0.1
+  const pointLight1 = createPointLight(inten)
+  const pointLight2 = createPointLight(inten)
+  const pointLight3 = createPointLight(inten)
+  const pointLight4 = createPointLight(inten)
+  pointLight1.position.set(4, -4, -2)
+  pointLight2.position.set(-4, 4, -2)
+  pointLight3.position.set(4, 4, 6)
+  pointLight4.position.set(-4, -4, 6)
 }
 
 /**
@@ -195,7 +206,8 @@ const loadModel = () => {
     setModel(model)
 
     model.position.set(0, 0, 0)
-    model.rotation.x = -0.2
+    model.rotation.x = -0.1
+    model.rotation.y = 0.1
 
     model.traverse(function (child) {
       child.castShadow = true
@@ -207,6 +219,17 @@ const loadModel = () => {
       if (child.name === "MinuteHand") {
         minuteHand = child
       }
+      if (child.name === "HourHand") {
+        hourHand = child
+      }
+    })
+    startClock()
+    gsap.from(model.position, { duration: 1, x: -10, delay: 0.5 })
+    gsap.from(model.scale, { duration: 1, x: 0.1, y: 0.1, z: 0.1, delay: 0.5 })
+    gsap.from(model.rotation, {
+      duration: 1,
+      y: -Math.PI * 2,
+      delay: 0.5,
     })
   })
 }
@@ -223,20 +246,21 @@ const tick = () => {
   const deltaTime = elapsedTime - previousTime
   previousTime = elapsedTime
 
-  // controls.update()
+  controls.update()
+
   renderer.render(scene, camera)
   stats.update()
 
-  secondHand.rotation.z -= 0.001
-  minuteHand.rotation.z -= 0.00002
+  // secondHand.rotation.z -= 0.001
+  // minuteHand.rotation.z -= 0.00002
 
   const parallaxX = cursor.x * 0.6
   const parallaxY = -cursor.y * 0.6
   cameraGroup.position.x += (parallaxX - cameraGroup.position.x) * 5 * deltaTime
   cameraGroup.position.y += (parallaxY - cameraGroup.position.y) * 5 * deltaTime
 
-  cameraGroup.rotation.y += (parallaxX - cameraGroup.position.x) * 8 * deltaTime
-  cameraGroup.rotation.x -= (parallaxY - cameraGroup.position.y) * 2 * deltaTime
+  // cameraGroup.rotation.y += (parallaxX - cameraGroup.position.x) * 8 * deltaTime
+  // cameraGroup.rotation.x -= (parallaxY - cameraGroup.position.y) * 2 * deltaTime
 
   renderer.render(scene, camera)
   window.requestAnimationFrame(tick)
@@ -295,3 +319,35 @@ window.addEventListener("mousemove", (event) => {
 })
 
 EventBus.on(constants.ASSETS_LOADED, handleAssetsLoaded)
+
+/**
+ * Time
+ */
+const setTime = () => {
+  const current = new Date(),
+    minuteTickDistance = (Math.PI * 2) / 60,
+    hourTickDistance = (Math.PI * 2) / 12
+
+  // const percOfMinute = current.getMinutes() / 60
+
+  secondHand.rotation.z = -Math.PI * 2 * (current.getSeconds() / 60)
+  minuteHand.rotation.z = -current.getMinutes() * minuteTickDistance
+  hourHand.rotation.z = -current.getHours() * hourTickDistance
+
+  console.log(current.getMinutes())
+}
+const startClock = () => {
+  setInterval(() => {
+    setTime()
+  }, 1000)
+  // setTime()
+}
+
+/**
+ * Fonts
+ */
+// const fontLoader = new FontLoader()
+
+// fontLoader.load(typefaceFont, (font) => {
+//   console.log("loaded")
+// })
