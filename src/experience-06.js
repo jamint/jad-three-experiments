@@ -19,8 +19,6 @@ import {
   setCamera,
 } from "./model"
 
-console.log("hello")
-
 import { createPointLight } from "./scripts/utils/lights"
 
 const textureLoader = new THREE.TextureLoader(),
@@ -28,23 +26,10 @@ const textureLoader = new THREE.TextureLoader(),
   directionali1Intensity = 1,
   envMapExposure = 0.4,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-05/watches-01-b.glb",
-  modelGroup = new THREE.Group(),
-  months = [
-    "JAN",
-    "FEB",
-    "MAR",
-    "APR",
-    "MAY",
-    "JUN",
-    "JUL",
-    "AUG",
-    "SEP",
-    "OCT",
-    "NOV",
-    "DEC",
-  ],
-  days = ["SUN", "MON", "TUE", "WED", "THU", "F R I", "SAT"]
+  modelSrc = "model-06/watch-06-a.glb",
+  // modelSrc = "model-05/watches-01-b.glb",
+  modelGroup = new THREE.Group()
+// days = ["SUN", "MON", "TUE", "WED", "THU", "F R I", "SAT"]
 
 let canvas = null,
   fov = null,
@@ -60,7 +45,8 @@ let canvas = null,
   secondHand = null,
   minuteHand = null,
   hourHand = null,
-  cameraGroup = null
+  cameraGroup = null,
+  mesh = null
 
 /**
  * Loaders
@@ -69,8 +55,8 @@ const stats = new Stats()
 let fakeLodingProgress = 0,
   int = null
 
-const statsEl = document.querySelector("#stats-container")
-statsEl.appendChild(stats.dom)
+// const statsEl = document.querySelector("#stats-container")
+// statsEl.appendChild(stats.dom)
 
 const loadingManager = new THREE.LoadingManager(
   () => {
@@ -223,36 +209,35 @@ const loadModel = () => {
     modelGroup.rotation.x = -0.1
     modelGroup.rotation.y = 0.1
 
-    model.traverse(function (child) {
-      child.castShadow = true
-      child.receiveShadow = true
+    // model.traverse(function (child) {
+    //   child.castShadow = true
+    //   child.receiveShadow = true
 
-      if (child.name === "SecondHand") {
-        secondHand = child
-      }
-      if (child.name === "MinuteHand") {
-        minuteHand = child
-      }
-      if (child.name === "HourHand") {
-        hourHand = child
-      }
-    })
-    startClock()
-    const date = String(new Date().getDate())
-    addText(modelGroup, date, {
-      x: 0.45,
-      y: 0.02,
-      z: 1.3,
-    })
+    //   if (child.name === "SecondHand") {
+    //     secondHand = child
+    //   }
+    //   if (child.name === "MinuteHand") {
+    //     minuteHand = child
+    //   }
+    //   if (child.name === "HourHand") {
+    //     hourHand = child
+    //   }
+    // })
+    // startClock()
+    // const date = String(new Date().getDate())
+    // // addText(modelGroup, date, {
+    // //   x: 0.45,
+    // //   y: 0.02,
+    // //   z: 1.3,
+    // // })
 
-    const day = days[new Date().getDay()]
-    const month = months[new Date().getMonth()]
+    // const day = days[new Date().getDay()]
 
-    addText(modelGroup, day, {
-      x: -0.387,
-      y: 0.02,
-      z: 1.3,
-    })
+    // // addText(modelGroup, day, {
+    // //   x: -0.387,
+    // //   y: 0.02,
+    // //   z: 1.3,
+    // // })
 
     let duration = 1.7
     gsap.from(modelGroup.position, {
@@ -291,21 +276,26 @@ const tick = () => {
   controls.update()
 
   renderer.render(scene, camera)
-  stats.update()
+  // stats.update()
 
   // const parallaxX = cursor.x * 0.1
   // const parallaxY = -cursor.y * 0.1
 
-  //   modelGroup.position.y += Math.sin(deltaTime * Math.PI) * 0.01
+  // modelGroup.position.y += Math.sin(deltaTime * Math.PI) * 0.01
   const distPosY = 0.04
   const distRotY = 0.1
-  //   this.x += speed * Math.sin(this.angle);
+  // this.x += speed * Math.sin(this.angle);
 
   modelGroup.position.y = distPosY * Math.cos(speedPosY)
   modelGroup.rotation.y = distRotY * Math.cos(speedRotY)
 
   speedPosY += 0.01
   speedRotY += 0.005
+
+  // if (mesh) {
+  //   mesh.rotation.x += 0.01
+  //   mesh.rotation.y += 0.01
+  // }
 
   // modelGroup.position.x -= (parallaxX - cameraGroup.position.x) * 2 * deltaTime
   // modelGroup.position.y -= (parallaxY - cameraGroup.position.y) * 2 * deltaTime
@@ -320,7 +310,6 @@ const tick = () => {
 /**
  * Resize
  */
-
 const handleResize = () => {
   const w = canvasContainer.getBoundingClientRect().width
   const h = canvasContainer.getBoundingClientRect().height
@@ -387,5 +376,23 @@ const startClock = () => {
 }
 
 const loadHTMLCanvas = () => {
-  console.log("hiiii")
+  // const drawingCanvas = document.getElementById("drawing-canvas")
+  // const drawingContext = drawingCanvas.getContext("2d")
+  // const material = new THREE.MeshStandardMaterial()
+  // material.map = new THREE.CanvasTexture(drawingCanvas)
+  // renderer.capabilities.getMaxAnisotropy()
+  // material.map.minFilter = THREE.LinearFilter
+  // drawingContext.fillStyle = "#00FF00"
+  // drawingContext.fillRect(0, 0, 256, 256)
+  // drawingContext.width = 256
+  // drawingContext.height = 256
+  // drawingContext.beginPath()
+  // drawingContext.moveTo(0, 0)
+  // drawingContext.lineTo(50, 20)
+  // drawingContext.stroke()
+  // // material.map.needsUpdate = true
+  // const g = new THREE.PlaneGeometry(5, 5)
+  // const m = new THREE.MeshBasicMaterial({ color: 0x0000ff })
+  // const c = new THREE.Mesh(g, material)
+  // scene.add(c)
 }
