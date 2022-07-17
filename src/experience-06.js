@@ -2,6 +2,7 @@ import * as THREE from "three"
 import EventBus from "eventing-bus"
 import gsap from "gsap"
 import HDRbg from "../static/hdr_500.hdr"
+// import HDRbg from "../static/hdr/studio_small_03_4k.hdr"
 import Stats from "stats-js"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
@@ -24,29 +25,35 @@ import { createPointLight } from "./scripts/utils/lights"
 const textureLoader = new THREE.TextureLoader(),
   directional1Position = [1, 20, 3],
   directionali1Intensity = 1,
-  envMapExposure = 0.4,
+  envMapExposure = 0.6,
+  // envMapExposure = 1,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-06/watch-06-a.glb",
+  modelSrc = "model-06/watch-06-c.glb",
   // modelSrc = "model-05/watches-01-b.glb",
   modelGroup = new THREE.Group()
 // days = ["SUN", "MON", "TUE", "WED", "THU", "F R I", "SAT"]
 
 let canvas = null,
-  fov = null,
+  fov = 15,
   scene = null,
   renderer = null,
   camera = null,
   controls = null,
   pmremGenerator = null,
   sizes = null,
-  camPos = [0, 0, 12],
+  camPos = [0, 0, 23],
   controlsPos = [0, 0, 0],
   model = null,
   secondHand = null,
   minuteHand = null,
   hourHand = null,
   cameraGroup = null,
-  mesh = null
+  mesh = null,
+  // gear0 = null,
+  // gear1 = null
+  // gear2 = null,
+  // gear3 = null,
+  faceAlpha = null
 
 /**
  * Loaders
@@ -55,8 +62,8 @@ const stats = new Stats()
 let fakeLodingProgress = 0,
   int = null
 
-// const statsEl = document.querySelector("#stats-container")
-// statsEl.appendChild(stats.dom)
+const statsEl = document.querySelector("#stats-container")
+statsEl.appendChild(stats.dom)
 
 const loadingManager = new THREE.LoadingManager(
   () => {
@@ -117,7 +124,8 @@ const init = () => {
   cameraGroup = new THREE.Group()
   scene.add(cameraGroup)
 
-  fov = window.innerWidth < 600 ? 45 : 30
+  // fov = window.innerWidth < 600 ? 45 : 30
+  // fov = 20
   camera = new THREE.PerspectiveCamera(
     fov,
     sizes.width / sizes.height,
@@ -133,10 +141,10 @@ const init = () => {
   controls.enablePan = false
   controls.enableZoom = false
   // controls.target.set(controlsPos[0], controlsPos[1], controlsPos[2])
-  controls.minAzimuthAngle = -1
-  controls.maxAzimuthAngle = 1
-  controls.minPolarAngle = 1.1
-  controls.maxPolarAngle = 1.8
+  // controls.minAzimuthAngle = -1
+  // controls.maxAzimuthAngle = 1
+  // controls.minPolarAngle = 1.1
+  // controls.maxPolarAngle = 1.8
   setOrbitControls(controls)
 
   pmremGenerator = new THREE.PMREMGenerator(renderer)
@@ -177,7 +185,7 @@ const loadLights = () => {
   //   ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
   // scene.add(ambient)
 
-  // const inten = 0.1
+  // const inten = 1
   // const pointLight1 = createPointLight(inten)
   // const pointLight2 = createPointLight(inten)
   // const pointLight3 = createPointLight(inten)
@@ -209,36 +217,36 @@ const loadModel = () => {
     modelGroup.rotation.x = -0.1
     modelGroup.rotation.y = 0.1
 
-    // model.traverse(function (child) {
-    //   child.castShadow = true
-    //   child.receiveShadow = true
+    model.traverse(function (child) {
+      child.castShadow = true
+      child.receiveShadow = true
 
-    //   if (child.name === "SecondHand") {
-    //     secondHand = child
-    //   }
-    //   if (child.name === "MinuteHand") {
-    //     minuteHand = child
-    //   }
-    //   if (child.name === "HourHand") {
-    //     hourHand = child
-    //   }
-    // })
-    // startClock()
-    // const date = String(new Date().getDate())
-    // // addText(modelGroup, date, {
-    // //   x: 0.45,
-    // //   y: 0.02,
-    // //   z: 1.3,
-    // // })
+      // if (child.name === "Gear0") gear0 = child
+      if (child.name === "Face") faceAlpha = child
+      // if (child.name === "Gear2") gear2 = child
+      // if (child.name === "Gear3") gear3 = child
 
-    // const day = days[new Date().getDay()]
+      if (child.name === "SecondHand") secondHand = child
+      if (child.name === "MinuteHand") minuteHand = child
+      if (child.name === "HourHand") hourHand = child
 
-    // // addText(modelGroup, day, {
-    // //   x: -0.387,
-    // //   y: 0.02,
-    // //   z: 1.3,
-    // // })
+      // })
+      // startClock()
+      // const date = String(new Date().getDate())
+      // // addText(modelGroup, date, {
+      // //   x: 0.45,
+      // //   y: 0.02,
+      // //   z: 1.3,
+      // })
 
+      // const day = days[new Date().getDay()]
+
+      // // addText(modelGroup, day, {
+      // //   x: -0.387,
+      // //   y: 0.02,
+      // //   z: 1.3,
+    })
+    startClock()
     let duration = 1.7
     gsap.from(modelGroup.position, {
       duration,
@@ -276,7 +284,7 @@ const tick = () => {
   controls.update()
 
   renderer.render(scene, camera)
-  // stats.update()
+  stats.update()
 
   // const parallaxX = cursor.x * 0.1
   // const parallaxY = -cursor.y * 0.1
@@ -284,13 +292,15 @@ const tick = () => {
   // modelGroup.position.y += Math.sin(deltaTime * Math.PI) * 0.01
   const distPosY = 0.04
   const distRotY = 0.1
-  // this.x += speed * Math.sin(this.angle);
 
-  modelGroup.position.y = distPosY * Math.cos(speedPosY)
-  modelGroup.rotation.y = distRotY * Math.cos(speedRotY)
+  // modelGroup.position.y = distPosY * Math.cos(speedPosY)
+  // modelGroup.rotation.y = distRotY * Math.cos(speedRotY)
 
   speedPosY += 0.01
   speedRotY += 0.005
+
+  // gear1.rotation.z += 0.02
+  faceAlpha.rotation.z += 0.001
 
   // if (mesh) {
   //   mesh.rotation.x += 0.01
@@ -360,12 +370,24 @@ const setTime = () => {
   const percOfMinute = current.getSeconds() / 60
   const percOfHour = current.getMinutes() / 60
 
-  secondHand.rotation.z = -Math.PI * 2 * (current.getSeconds() / 60)
+  // secondHand.rotation.z = -Math.PI * 2 * (current.getSeconds() / 60)
+  gsap.to(secondHand.rotation, {
+    duration: 0.3,
+    z: -Math.PI * 2 * (current.getSeconds() / 60),
+    ease: "elastic.out(1, 0.6)",
+  })
   minuteHand.rotation.z =
     -current.getMinutes() * minuteTickDistance -
     minuteTickDistance * percOfMinute
   hourHand.rotation.z =
     -current.getHours() * hourTickDistance - hourTickDistance * percOfHour
+
+  // console.log(gear0)
+  // gsap.to(gear0.rotation, {
+  //   duration: 0.1,
+  //   z: -Math.PI * 2 * (current.getSeconds() / 60),
+  // })
+  // gear1.rotation.z += 0.01
 }
 
 const startClock = () => {

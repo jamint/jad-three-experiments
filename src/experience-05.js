@@ -45,14 +45,14 @@ const textureLoader = new THREE.TextureLoader(),
   days = ["SUN", "MON", "TUE", "WED", "THU", "F R I", "SAT"]
 
 let canvas = null,
-  fov = null,
+  fov = 15,
   scene = null,
   renderer = null,
   camera = null,
   controls = null,
   pmremGenerator = null,
   sizes = null,
-  camPos = [0, 0, 11],
+  camPos = [0, 0, 22],
   controlsPos = [0, 0, 0],
   model = null,
   secondHand = null,
@@ -129,7 +129,8 @@ const init = () => {
   cameraGroup = new THREE.Group()
   scene.add(cameraGroup)
 
-  fov = window.innerWidth < 600 ? 45 : 30
+  // fov = window.innerWidth < 600 ? 45 : 30
+
   camera = new THREE.PerspectiveCamera(
     fov,
     sizes.width / sizes.height,
