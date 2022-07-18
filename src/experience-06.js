@@ -2,7 +2,6 @@ import * as THREE from "three"
 import EventBus from "eventing-bus"
 import gsap from "gsap"
 import HDRbg from "../static/hdr_500.hdr"
-// import HDRbg from "../static/hdr/studio_small_03_4k.hdr"
 import Stats from "stats-js"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
@@ -23,15 +22,12 @@ import {
 import { createPointLight } from "./scripts/utils/lights"
 
 const textureLoader = new THREE.TextureLoader(),
-  directional1Position = [1, 20, 3],
-  directionali1Intensity = 1,
+  directional1Position = [3, 20, 5],
+  directionali1Intensity = 0.5,
   envMapExposure = 0.6,
-  // envMapExposure = 1,
   canvasContainer = document.querySelector(".canvas-container"),
-  modelSrc = "model-06/watch-06-c.glb",
-  // modelSrc = "model-05/watches-01-b.glb",
+  modelSrc = "model-06/watch-06-d.glb",
   modelGroup = new THREE.Group()
-// days = ["SUN", "MON", "TUE", "WED", "THU", "F R I", "SAT"]
 
 let canvas = null,
   fov = 15,
@@ -49,13 +45,10 @@ let canvas = null,
   hourHand = null,
   cameraGroup = null,
   mesh = null,
-  // gear0 = null,
-  // gear1 = null
-  // gear2 = null,
-  // gear3 = null,
   faceAlpha = null,
   faceAlpha2 = null,
   faceBack = null
+
 /**
  * Loaders
  */
@@ -126,7 +119,6 @@ const init = () => {
   scene.add(cameraGroup)
 
   // fov = window.innerWidth < 600 ? 45 : 30
-  // fov = 20
   camera = new THREE.PerspectiveCamera(
     fov,
     sizes.width / sizes.height,
@@ -180,21 +172,21 @@ const loadLights = () => {
   directional1.castShadow = true
   // const helper = new THREE.DirectionalLightHelper(directional1, 5)
   // scene.add(helper)
-  // scene.add(directional1)
+  scene.add(directional1)
 
-  const ambientIntensity = 0.3,
+  const ambientIntensity = 0.8,
     ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
   scene.add(ambient)
 
-  const inten = 0.2
-  const pointLight1 = createPointLight(inten)
+  const inten = 0.3
+  // const pointLight1 = createPointLight(inten)
   const pointLight2 = createPointLight(inten)
   const pointLight3 = createPointLight(inten)
-  const pointLight4 = createPointLight(inten)
-  pointLight1.position.set(4, -4, -2)
+  // const pointLight4 = createPointLight(inten)
+  // pointLight1.position.set(4, -4, -2)
   pointLight2.position.set(-4, 4, -2)
-  pointLight3.position.set(4, 4, 6)
-  pointLight4.position.set(-4, -4, 6)
+  pointLight3.position.set(2, -6, 6)
+  // pointLight4.position.set(-4, -4, 6)
 }
 
 /**
