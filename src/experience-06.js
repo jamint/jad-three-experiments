@@ -300,7 +300,7 @@ const tick = () => {
   speedRotY += 0.005
 
   // gear1.rotation.z += 0.02
-  faceAlpha.rotation.z += 0.001 * deltaTime
+  faceAlpha.rotation.z += 0.1 * deltaTime
 
   // if (mesh) {
   //   mesh.rotation.x += 0.01
