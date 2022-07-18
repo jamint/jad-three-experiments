@@ -141,10 +141,10 @@ const init = () => {
   controls.enablePan = false
   controls.enableZoom = false
   // controls.target.set(controlsPos[0], controlsPos[1], controlsPos[2])
-  // controls.minAzimuthAngle = -1
-  // controls.maxAzimuthAngle = 1
-  // controls.minPolarAngle = 1.1
-  // controls.maxPolarAngle = 1.8
+  controls.minAzimuthAngle = -1
+  controls.maxAzimuthAngle = 1
+  controls.minPolarAngle = 1.1
+  controls.maxPolarAngle = 1.8
   setOrbitControls(controls)
 
   pmremGenerator = new THREE.PMREMGenerator(renderer)
@@ -300,7 +300,7 @@ const tick = () => {
   speedRotY += 0.005
 
   // gear1.rotation.z += 0.02
-  faceAlpha.rotation.z += 0.001
+  faceAlpha.rotation.z += 0.001 * deltaTime
 
   // if (mesh) {
   //   mesh.rotation.x += 0.01
