@@ -182,11 +182,11 @@ const loadLights = () => {
   // scene.add(helper)
   // scene.add(directional1)
 
-  // const ambientIntensity = 0.3,
-  //   ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
-  // scene.add(ambient)
+  const ambientIntensity = 0.3,
+    ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
+  scene.add(ambient)
 
-  const inten = 0.3
+  const inten = 0.2
   const pointLight1 = createPointLight(inten)
   const pointLight2 = createPointLight(inten)
   const pointLight3 = createPointLight(inten)
