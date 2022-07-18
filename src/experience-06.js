@@ -53,8 +53,9 @@ let canvas = null,
   // gear1 = null
   // gear2 = null,
   // gear3 = null,
-  faceAlpha = null
-
+  faceAlpha = null,
+  faceAlpha2 = null,
+  faceBack = null
 /**
  * Loaders
  */
@@ -185,15 +186,15 @@ const loadLights = () => {
   //   ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
   // scene.add(ambient)
 
-  // const inten = 1
-  // const pointLight1 = createPointLight(inten)
-  // const pointLight2 = createPointLight(inten)
-  // const pointLight3 = createPointLight(inten)
-  // const pointLight4 = createPointLight(inten)
-  // pointLight1.position.set(4, -4, -2)
-  // pointLight2.position.set(-4, 4, -2)
-  // pointLight3.position.set(4, 4, 6)
-  // pointLight4.position.set(-4, -4, 6)
+  const inten = 0.3
+  const pointLight1 = createPointLight(inten)
+  const pointLight2 = createPointLight(inten)
+  const pointLight3 = createPointLight(inten)
+  const pointLight4 = createPointLight(inten)
+  pointLight1.position.set(4, -4, -2)
+  pointLight2.position.set(-4, 4, -2)
+  pointLight3.position.set(4, 4, 6)
+  pointLight4.position.set(-4, -4, 6)
 }
 
 /**
@@ -222,13 +223,25 @@ const loadModel = () => {
       child.receiveShadow = true
 
       // if (child.name === "Gear0") gear0 = child
-      if (child.name === "Face") faceAlpha = child
+      if (child.name === "FaceAlpha") faceAlpha = child
+      if (child.name === "FaceAlpha2") faceAlpha2 = child
       // if (child.name === "Gear2") gear2 = child
       // if (child.name === "Gear3") gear3 = child
 
       if (child.name === "SecondHand") secondHand = child
       if (child.name === "MinuteHand") minuteHand = child
       if (child.name === "HourHand") hourHand = child
+      if (child.name === "FaceBack") {
+        if (child.isMesh) {
+          console.log("a mesh")
+        }
+        faceBack = child
+      }
+
+      // console.log(faceBack.material)
+      // if (faceBack.isMesh) {
+      //   console.log("its a mesh")
+      // }
 
       // })
       // startClock()
@@ -245,6 +258,18 @@ const loadModel = () => {
       // //   x: -0.387,
       // //   y: 0.02,
       // //   z: 1.3,
+    })
+    console.log(faceBack)
+    // Color
+    var targetColor = new THREE.Color(0xcdcc64)
+    gsap.to(faceBack.material.color, {
+      duration: 3,
+      r: targetColor.r,
+      g: targetColor.g,
+      b: targetColor.b,
+      repeat: -1,
+      yoyo: true,
+      ease: "power2.inOut",
     })
     startClock()
     let duration = 1.7
@@ -301,6 +326,7 @@ const tick = () => {
 
   // gear1.rotation.z += 0.02
   faceAlpha.rotation.z += 0.1 * deltaTime
+  faceAlpha2.rotation.z -= 0.01 * deltaTime
 
   // if (mesh) {
   //   mesh.rotation.x += 0.01
@@ -370,12 +396,12 @@ const setTime = () => {
   const percOfMinute = current.getSeconds() / 60
   const percOfHour = current.getMinutes() / 60
 
-  // secondHand.rotation.z = -Math.PI * 2 * (current.getSeconds() / 60)
-  gsap.to(secondHand.rotation, {
-    duration: 0.3,
-    z: -Math.PI * 2 * (current.getSeconds() / 60),
-    ease: "elastic.out(1, 0.6)",
-  })
+  secondHand.rotation.z = -Math.PI * 2 * (current.getSeconds() / 60)
+  // gsap.to(secondHand.rotation, {
+  //   duration: 0.3,
+  //   z: -Math.PI * 2 * (current.getSeconds() / 60),
+  //   ease: "elastic.out(1, 0.6)",
+  // })
   minuteHand.rotation.z =
     -current.getMinutes() * minuteTickDistance -
     minuteTickDistance * percOfMinute
