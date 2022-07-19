@@ -178,15 +178,15 @@ const loadLights = () => {
     ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
   scene.add(ambient)
 
-  const inten = 0.3
-  // const pointLight1 = createPointLight(inten)
-  const pointLight2 = createPointLight(inten)
-  const pointLight3 = createPointLight(inten)
-  // const pointLight4 = createPointLight(inten)
-  // pointLight1.position.set(4, -4, -2)
-  pointLight2.position.set(-4, 4, -2)
-  pointLight3.position.set(2, -6, 6)
-  // pointLight4.position.set(-4, -4, 6)
+  // const inten = 0.3
+  // // const pointLight1 = createPointLight(inten)
+  // const pointLight2 = createPointLight(inten)
+  // const pointLight3 = createPointLight(inten)
+  // // const pointLight4 = createPointLight(inten)
+  // // pointLight1.position.set(4, -4, -2)
+  // pointLight2.position.set(-4, 4, -2)
+  // pointLight3.position.set(2, -6, 6)
+  // // pointLight4.position.set(-4, -4, 6)
 }
 
 /**
