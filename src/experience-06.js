@@ -174,7 +174,7 @@ const loadLights = () => {
   // scene.add(helper)
   scene.add(directional1)
 
-  const ambientIntensity = 0.8,
+  const ambientIntensity = 0.9,
     ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
   scene.add(ambient)
 
