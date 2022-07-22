@@ -23,7 +23,6 @@ export const addVideos = (meshes) => {
       "canplay",
       function () {
         video.play()
-        console.log("playing")
 
         videoContainer.appendChild(video)
 
@@ -36,7 +35,7 @@ export const addVideos = (meshes) => {
           map: videoTexture,
           side: THREE.FrontSide,
           toneMapped: false,
-          roughness: 0,
+          roughness: 0.1,
         })
         videoMaterial.needsUpdate = true
         meshes[i].material = videoMaterial

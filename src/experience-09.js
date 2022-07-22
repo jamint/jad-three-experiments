@@ -30,14 +30,14 @@ const textureLoader = new THREE.TextureLoader(),
   modelGroup = new THREE.Group()
 
 let canvas = null,
-  fov = 25,
+  fov = 5,
   scene = null,
   renderer = null,
   camera = null,
   controls = null,
   pmremGenerator = null,
   sizes = null,
-  camPos = [0, 0, 38],
+  camPos = [0, 0, 150],
   controlsPos = [0, 0, 0],
   model = null,
   secondHand = null,
@@ -53,11 +53,11 @@ let canvas = null,
 /**
  * Loaders
  */
-// const stats = new Stats()
-// let fakeLodingProgress = 0,
+const stats = new Stats()
+let fakeLodingProgress = 0
 
-// const statsEl = document.querySelector("#stats-container")
-// statsEl.appendChild(stats.dom)
+const statsEl = document.querySelector("#stats-container")
+statsEl.appendChild(stats.dom)
 
 const loadingManager = new THREE.LoadingManager(
   () => {
@@ -134,10 +134,10 @@ const init = () => {
   controls.enablePan = false
   // controls.enableZoom = false
   // controls.target.set(controlsPos[0], controlsPos[1], controlsPos[2])
-  controls.minAzimuthAngle = -1
-  controls.maxAzimuthAngle = 1
-  controls.minPolarAngle = 1.1
-  controls.maxPolarAngle = 1.8
+  // controls.minAzimuthAngle = -1
+  // controls.maxAzimuthAngle = 1
+  controls.minPolarAngle = 1.6
+  controls.maxPolarAngle = 1.6
   setOrbitControls(controls)
 
   pmremGenerator = new THREE.PMREMGenerator(renderer)
@@ -209,7 +209,7 @@ const loadModel = () => {
     setModel(model)
 
     // modelGroup.position.set(0, 0, 0)
-    modelGroup.rotation.x = -0.1
+    // modelGroup.rotation.x = -0.1
     modelGroup.rotation.y = 0.2
 
     model.traverse(function (child) {
@@ -235,20 +235,21 @@ const loadModel = () => {
     //   yoyo: true,
     //   ease: "power2.inOut",
     // })
+
     let duration = 1.7
-    gsap.from(modelGroup.position, {
+    gsap.from(model.position, {
       duration,
-      x: -10,
+      z: -10,
       ease: "power4.out",
     })
-    gsap.from(modelGroup.scale, {
+    gsap.from(model.scale, {
       duration: (duration += 0.5),
       x: 0.1,
       y: 0.1,
       z: 0.1,
       ease: "power4.out",
     })
-    gsap.from(modelGroup.rotation, {
+    gsap.from(model.rotation, {
       duration,
       y: -Math.PI * 2,
       ease: "power4.out",
@@ -272,17 +273,22 @@ const tick = () => {
   controls.update()
 
   renderer.render(scene, camera)
-  // stats.update()
+  stats.update()
+
+  // x-axis
+  // console.log(controls.getPolarAngle())
+  // y-axis
+  console.log(controls.getAzimuthalAngle())
 
   // const parallaxX = cursor.x * 0.1
   // const parallaxY = -cursor.y * 0.1
 
   // modelGroup.position.y += Math.sin(deltaTime * Math.PI) * 0.01
   const distPosY = 0.04
-  const distRotY = 0.1
+  const distRotY = 0.2
 
   // modelGroup.position.y = distPosY * Math.cos(speedPosY)
-  // modelGroup.rotation.y = distRotY * Math.cos(speedRotY)
+  modelGroup.rotation.y = distRotY * Math.cos(speedRotY)
 
   speedPosY += 0.01
   speedRotY += 0.005
