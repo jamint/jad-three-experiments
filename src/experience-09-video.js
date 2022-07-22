@@ -20,14 +20,14 @@ export const addVideos = (meshes) => {
     const video = document.createElement("video")
     video.src = videosArr[i].src
     video.style.display = "none"
-    video.autoplay = true
-    video.controls = false
-    video.muted = true
-    video.loop = true
 
     video.addEventListener(
       "canplay",
       function () {
+        video.autoplay = true
+        video.controls = false
+        video.muted = true
+        video.loop = true
         video.play()
 
         videoContainer.appendChild(video)
