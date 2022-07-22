@@ -30,14 +30,18 @@ const textureLoader = new THREE.TextureLoader(),
   modelGroup = new THREE.Group()
 
 let canvas = null,
-  fov = 5,
+  // fov = 5,
+  fov = 60,
+  camPos = [0, 0, 14],
+  minPolarAngle = 1.7,
+  maxPolarAngle = 1.7,
   scene = null,
   renderer = null,
   camera = null,
   controls = null,
   pmremGenerator = null,
   sizes = null,
-  camPos = [0, 0, 150],
+  // camPos = [0, 0, 150],
   controlsPos = [0, 0, 0],
   model = null,
   secondHand = null,
@@ -136,8 +140,8 @@ const init = () => {
   // controls.target.set(controlsPos[0], controlsPos[1], controlsPos[2])
   // controls.minAzimuthAngle = -1
   // controls.maxAzimuthAngle = 1
-  controls.minPolarAngle = 1.6
-  controls.maxPolarAngle = 1.6
+  controls.minPolarAngle = minPolarAngle
+  controls.maxPolarAngle = maxPolarAngle
   setOrbitControls(controls)
 
   pmremGenerator = new THREE.PMREMGenerator(renderer)
