@@ -52,7 +52,13 @@ let canvas = null,
   one = null,
   two = null,
   thr = null,
-  four = null
+  four = null,
+  five = null,
+  six = null,
+  seven = null,
+  eight = null,
+  nine = null,
+  ten = null
 
 /**
  * Loaders
@@ -214,7 +220,7 @@ const loadModel = () => {
 
     // modelGroup.position.set(0, 0, 0)
     // modelGroup.rotation.x = -0.1
-    modelGroup.rotation.y = 0.2
+    // modelGroup.rotation.y = 0.2
 
     model.traverse(function (child) {
       child.castShadow = true
@@ -224,21 +230,15 @@ const loadModel = () => {
       if (child.name === "02") two = child
       if (child.name === "03") thr = child
       if (child.name === "04") four = child
+      if (child.name === "05") five = child
+      if (child.name === "06") six = child
+      if (child.name === "07") seven = child
+      if (child.name === "08") eight = child
+      if (child.name === "09") nine = child
+      if (child.name === "10") ten = child
     })
-    const meshes = [one, two, thr, four]
+    const meshes = [one, two, thr, four, five, six, seven, eight, nine, ten]
     addVideos(meshes)
-
-    // Color
-    // var targetColor = new THREE.Color(0xcdcc64)
-    // gsap.to(faceBack.material.color, {
-    //   duration: 3,
-    //   r: targetColor.r,
-    //   g: targetColor.g,
-    //   b: targetColor.b,
-    //   repeat: -1,
-    //   yoyo: true,
-    //   ease: "power2.inOut",
-    // })
 
     let duration = 1.7
     gsap.from(model.position, {
@@ -282,7 +282,7 @@ const tick = () => {
   // x-axis
   // console.log(controls.getPolarAngle())
   // y-axis
-  console.log(controls.getAzimuthalAngle())
+  // console.log(controls.getAzimuthalAngle())
 
   // const parallaxX = cursor.x * 0.1
   // const parallaxY = -cursor.y * 0.1
@@ -292,7 +292,8 @@ const tick = () => {
   const distRotY = 0.2
 
   // modelGroup.position.y = distPosY * Math.cos(speedPosY)
-  modelGroup.rotation.y = distRotY * Math.cos(speedRotY)
+  // modelGroup.rotation.y = distRotY * Math.cos(speedRotY)
+  modelGroup.rotation.y += deltaTime * 0.3
 
   speedPosY += 0.01
   speedRotY += 0.005

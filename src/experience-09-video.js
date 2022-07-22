@@ -5,6 +5,12 @@ const videosArr = [
   { src: "havas-h/video/dos-equis-sm.mp4", repeatX: 0.5, repeatY: 1 },
   { src: "havas-h/video/riteaid-sm.mp4", repeatX: 0.5, repeatY: 1 },
   { src: "havas-h/video/adp-sm.mp4", repeatX: 0.5, repeatY: 1 },
+  { src: "havas-h/video/tda-blockchain-smss.mp4", repeatX: 0.5, repeatY: 1 },
+  { src: "havas-h/video/tda-lionelrichie-sm.mp4", repeatX: 0.5, repeatY: 1 },
+  { src: "havas-h/video/lacoste-sm.mp4", repeatX: 0.5, repeatY: 1 },
+  { src: "havas-h/video/film-fest-sm.mp4", repeatX: 0.5, repeatY: 1 },
+  { src: "havas-h/video/keurig-sm.mp4", repeatX: 0.5, repeatY: 1 },
+  { src: "havas-h/video/adidas-sm.mp4", repeatX: 0.5, repeatY: 1 },
 ]
 
 export const addVideos = (meshes) => {
@@ -30,12 +36,13 @@ export const addVideos = (meshes) => {
         videoTexture.needsUpdate = true
         videoTexture.repeat.set(videosArr[i].repeatX, videosArr[i].repeatY)
         videoTexture.center = new THREE.Vector2(0, 0)
+        videoTexture.encoding = THREE.sRGBEncoding
 
         const videoMaterial = new THREE.MeshStandardMaterial({
           map: videoTexture,
           side: THREE.FrontSide,
           toneMapped: false,
-          roughness: 0.1,
+          roughness: 0.2,
         })
         videoMaterial.needsUpdate = true
         meshes[i].material = videoMaterial
