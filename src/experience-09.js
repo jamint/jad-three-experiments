@@ -47,7 +47,8 @@ let canvas = null,
   int = null,
   one = null,
   two = null,
-  thr = null
+  thr = null,
+  four = null
 
 /**
  * Loaders
@@ -218,8 +219,9 @@ const loadModel = () => {
       if (child.name === "01") one = child
       if (child.name === "02") two = child
       if (child.name === "03") thr = child
+      if (child.name === "04") four = child
     })
-    const meshes = [one, two, thr]
+    const meshes = [one, two, thr, four]
     addVideos(meshes)
 
     // Color

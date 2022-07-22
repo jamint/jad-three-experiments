@@ -4,6 +4,7 @@ const videosArr = [
   { src: "havas-h/video/grammys-sm.mp4", repeatX: 0.5, repeatY: 1 },
   { src: "havas-h/video/dos-equis-sm.mp4", repeatX: 0.5, repeatY: 1 },
   { src: "havas-h/video/riteaid-sm.mp4", repeatX: 0.5, repeatY: 1 },
+  { src: "havas-h/video/adp-sm.mp4", repeatX: 0.5, repeatY: 1 },
 ]
 
 export const addVideos = (meshes) => {
