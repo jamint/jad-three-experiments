@@ -16,6 +16,7 @@ module.exports = {
     experience06: "./src/exp-06.js",
     experience07: "./src/exp-07.js",
     experience08: "./src/exp-08.js",
+    experience09: "./src/exp-09.js",
   },
   output: {
     filename: "[name].js",
@@ -84,6 +85,12 @@ module.exports = {
       filename: "experience-08.html",
       template: "./src/experience-08.html",
       chunks: ["experience08"],
+    }),
+    new HtmlWebpackPlugin({
+      inject: true,
+      filename: "experience-09.html",
+      template: "./src/experience-09.html",
+      chunks: ["experience09"],
     }),
     new MiniCSSExtractPlugin(),
   ],
