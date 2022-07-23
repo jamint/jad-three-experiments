@@ -21,33 +21,33 @@ export const addVideos = (meshes) => {
     video.src = videosArr[i].src
     video.style.display = "none"
 
-    video.addEventListener(
-      "canplay",
-      function () {
-        video.autoplay = true
-        video.controls = false
-        video.muted = true
-        video.loop = true
-        video.play()
+    // video.addEventListener(
+    //   "canplay",
+    //   function () {
+    video.autoplay = true
+    video.controls = false
+    video.muted = true
+    video.loop = true
+    video.play()
 
-        videoContainer.appendChild(video)
+    videoContainer.appendChild(video)
 
-        const videoTexture = new THREE.VideoTexture(video)
-        videoTexture.needsUpdate = true
-        videoTexture.repeat.set(videosArr[i].repeatX, videosArr[i].repeatY)
-        videoTexture.center = new THREE.Vector2(0, 0)
-        videoTexture.encoding = THREE.sRGBEncoding
+    const videoTexture = new THREE.VideoTexture(video)
+    videoTexture.needsUpdate = true
+    videoTexture.repeat.set(videosArr[i].repeatX, videosArr[i].repeatY)
+    videoTexture.center = new THREE.Vector2(0, 0)
+    videoTexture.encoding = THREE.sRGBEncoding
 
-        const videoMaterial = new THREE.MeshStandardMaterial({
-          map: videoTexture,
-          side: THREE.FrontSide,
-          toneMapped: false,
-          roughness: 0.2,
-        })
-        videoMaterial.needsUpdate = true
-        meshes[i].material = videoMaterial
-      },
-      true
-    )
+    const videoMaterial = new THREE.MeshStandardMaterial({
+      map: videoTexture,
+      side: THREE.FrontSide,
+      toneMapped: false,
+      roughness: 0.2,
+    })
+    videoMaterial.needsUpdate = true
+    meshes[i].material = videoMaterial
+    // },
+    // true
+    // )
   })
 }
