@@ -110,7 +110,7 @@ module.exports = {
         use: [MiniCSSExtractPlugin.loader, "css-loader", "sass-loader"],
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif|hdr)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|hdr|webp)$/i,
         type: "asset/resource",
       },
       {

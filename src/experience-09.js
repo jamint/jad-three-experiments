@@ -146,7 +146,7 @@ const init = () => {
   controls = new OrbitControls(camera, canvas)
   controls.enableDamping = true
   controls.enablePan = false
-  // controls.enableZoom = false
+  controls.enableZoom = false
   // controls.target.set(controlsPos[0], controlsPos[1], controlsPos[2])
   // controls.minAzimuthAngle = -1
   // controls.maxAzimuthAngle = 1
@@ -402,3 +402,24 @@ devicePlayBtn.addEventListener("click", () => {
   // okPlayThem()
   startExperience()
 })
+
+const bgImage = document.querySelector(".bg-img")
+console.log(bgImage)
+gsap.fromTo(
+  bgImage,
+  { alpha: 0 },
+  {
+    duration: 2,
+    alpha: 1,
+    delay: 1.5,
+    onComplete: () => {
+      gsap.fromTo(
+        bgImage,
+        { alpha: 1 },
+        { duration: 2, alpha: 0.75, yoyo: true, repeat: -1 }
+      )
+    },
+  }
+)
+// setTimeout(() => {}, 1500)
+// gsap.fromTo(bgImage, { alpha: 0.5 }, { duration: 2, alpha: 1 })
