@@ -3,6 +3,10 @@
   height: 100%;
   position: relative;
 
+  .video-container {
+    display: none;
+  }
+
   
   .play-btn-overlay {
     position: absolute;

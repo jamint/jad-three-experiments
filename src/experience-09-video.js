@@ -19,14 +19,7 @@ const videosArr = [
 
 export const addVideos = (meshes) => {
   meshesArr = meshes
-  //   if (touchDevice) {
-  //     curtain.classList.remove("hide")
-  //   } else {
-  //     okPlayThem()
-  //   }
-  // }
 
-  // const okPlayThem = () => {
   const videoContainer = document.getElementById("video-container")
 
   meshesArr.forEach((videoMesh, i) => {
@@ -41,6 +34,7 @@ export const addVideos = (meshes) => {
         video.controls = false
         video.muted = true
         video.loop = true
+        video.playsinline = true
         videoObjArr.push(video)
         videoContainer.appendChild(video)
 
@@ -65,17 +59,9 @@ export const addVideos = (meshes) => {
     )
   })
 }
+
 const playVideos = () => {
   videoObjArr.forEach((video) => {
     video.play()
   })
 }
-
-// const curtain = document.querySelector(".experience09 .play-btn-overlay")
-// const devicePlayBtn = curtain.querySelector(".btn")
-
-// devicePlayBtn.addEventListener("click", () => {
-//   curtain.classList.add("hide")
-//   // playVideos()
-//   okPlayThem()
-// })
