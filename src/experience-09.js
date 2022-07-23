@@ -23,8 +23,10 @@ import { createPointLight } from "./scripts/utils/lights"
 import { touchDevice } from "./common/mobile-detect"
 
 const textureLoader = new THREE.TextureLoader(),
-  directional1Position = [3, 20, 5],
+  directional1Position = [3, 20, 10],
   directionali1Intensity = 0.5,
+  directional2Position = [-3, 20, -20],
+  directional2Intensity = 0.5,
   envMapExposure = 0.6,
   canvasContainer = document.querySelector(".canvas-container"),
   modelSrc = "havas-h/havas-01.glb",
@@ -181,11 +183,26 @@ const loadLights = () => {
   )
   directional1.shadow.bias = -0.0004
   directional1.castShadow = true
-  // const helper = new THREE.DirectionalLightHelper(directional1, 5)
-  // scene.add(helper)
+  // const helper1 = new THREE.DirectionalLightHelper(directional1, 5)
+  // scene.add(helper1)
   scene.add(directional1)
 
-  // const ambientIntensity = 0.8,
+  const directional2 = new THREE.DirectionalLight(
+    "#ffffff",
+    directional2Intensity
+  )
+  directional2.position.set(
+    directional2Position[0],
+    directional2Position[1],
+    directional2Position[2]
+  )
+  directional2.shadow.bias = -0.0004
+  directional2.castShadow = true
+  // const helper2 = new THREE.DirectionalLightHelper(directional2, 5, "#ff0000")
+  // scene.add(helper2)
+  scene.add(directional2)
+
+  // const ambientIntensity = 0,
   //   ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
   // scene.add(ambient)
 
