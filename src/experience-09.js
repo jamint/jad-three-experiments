@@ -20,6 +20,7 @@ import {
 } from "./model"
 import { addVideos } from "./experience-09-video"
 import { createPointLight } from "./scripts/utils/lights"
+import { touchDevice } from "./common/mobile-detect"
 
 const textureLoader = new THREE.TextureLoader(),
   directional1Position = [3, 20, 5],
@@ -48,6 +49,7 @@ let canvas = null,
   minuteHand = null,
   hourHand = null,
   cameraGroup = null,
+  meshesArr = null,
   int = null,
   one = null,
   two = null,
@@ -237,27 +239,39 @@ const loadModel = () => {
       if (child.name === "09") nine = child
       if (child.name === "10") ten = child
     })
-    const meshes = [one, two, thr, four, five, six, seven, eight, nine, ten]
-    addVideos(meshes)
+    meshesArr = [one, two, thr, four, five, six, seven, eight, nine, ten]
 
-    let duration = 1.7
-    gsap.from(model.position, {
-      duration,
-      z: -10,
-      ease: "power4.out",
-    })
-    gsap.from(model.scale, {
-      duration: (duration += 0.5),
-      x: 0.1,
-      y: 0.1,
-      z: 0.1,
-      ease: "power4.out",
-    })
-    gsap.from(model.rotation, {
-      duration,
-      y: -Math.PI * 2,
-      ease: "power4.out",
-    })
+    if (touchDevice) {
+      curtain.classList.remove("hide")
+    } else {
+      startExperience()
+    }
+  })
+}
+
+const startExperience = () => {
+  addVideos(meshesArr)
+  let duration = 1.7
+  const delay = 1
+  // gsap.from(model.position, {
+  //   duration,
+  //   z: -10,
+  //   ease: "power4.out",
+  //   delay,
+  // })
+  gsap.from(model.scale, {
+    duration: (duration += 0.5),
+    x: 0.001,
+    y: 0.001,
+    z: 0.001,
+    ease: "power4.out",
+    delay,
+  })
+  gsap.from(model.rotation, {
+    duration,
+    y: -Math.PI * 2,
+    ease: "power4.out",
+    delay,
   })
 }
 
@@ -361,3 +375,13 @@ window.addEventListener("mousemove", (event) => {
 })
 
 EventBus.on(constants.ASSETS_LOADED, handleAssetsLoaded)
+
+const curtain = document.querySelector(".experience09 .play-btn-overlay")
+const devicePlayBtn = curtain.querySelector(".btn")
+
+devicePlayBtn.addEventListener("click", () => {
+  curtain.classList.add("hide")
+  // playVideos()
+  // okPlayThem()
+  startExperience()
+})

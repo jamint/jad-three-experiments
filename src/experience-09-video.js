@@ -19,14 +19,14 @@ const videosArr = [
 
 export const addVideos = (meshes) => {
   meshesArr = meshes
-  if (touchDevice) {
-    curtain.classList.remove("hide")
-  } else {
-    okPlayThem()
-  }
-}
+  //   if (touchDevice) {
+  //     curtain.classList.remove("hide")
+  //   } else {
+  //     okPlayThem()
+  //   }
+  // }
 
-const okPlayThem = () => {
+  // const okPlayThem = () => {
   const videoContainer = document.getElementById("video-container")
 
   meshesArr.forEach((videoMesh, i) => {
@@ -42,8 +42,6 @@ const okPlayThem = () => {
         video.muted = true
         video.loop = true
         videoObjArr.push(video)
-        // video.play()
-
         videoContainer.appendChild(video)
 
         const videoTexture = new THREE.VideoTexture(video)
@@ -73,11 +71,11 @@ const playVideos = () => {
   })
 }
 
-const curtain = document.querySelector(".experience09 .play-btn-overlay")
-const devicePlayBtn = curtain.querySelector(".btn")
+// const curtain = document.querySelector(".experience09 .play-btn-overlay")
+// const devicePlayBtn = curtain.querySelector(".btn")
 
-devicePlayBtn.addEventListener("click", () => {
-  curtain.classList.add("hide")
-  // playVideos()
-  okPlayThem()
-})
+// devicePlayBtn.addEventListener("click", () => {
+//   curtain.classList.add("hide")
+//   // playVideos()
+//   okPlayThem()
+// })
