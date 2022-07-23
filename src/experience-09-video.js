@@ -1,7 +1,8 @@
 import * as THREE from "three"
 import { touchDevice } from "./common/mobile-detect"
 
-let videoObjArr = []
+let videoObjArr = [],
+  meshesArr = []
 
 const videosArr = [
   { src: "havas-h/video/grammys-sm.mp4", repeatX: 0.5, repeatY: 1 },
@@ -17,9 +18,18 @@ const videosArr = [
 ]
 
 export const addVideos = (meshes) => {
+  meshesArr = meshes
+  if (touchDevice) {
+    curtain.classList.remove("hide")
+  } else {
+    okPlayThem()
+  }
+}
+
+const okPlayThem = () => {
   const videoContainer = document.getElementById("video-container")
 
-  meshes.forEach((videoMesh, i) => {
+  meshesArr.forEach((videoMesh, i) => {
     const video = document.createElement("video")
     video.src = videosArr[i].src
     video.style.display = "none"
@@ -49,7 +59,7 @@ export const addVideos = (meshes) => {
           roughness: 0.2,
         })
         videoMaterial.needsUpdate = true
-        meshes[i].material = videoMaterial
+        meshesArr[i].material = videoMaterial
 
         playVideos()
       },
@@ -66,11 +76,8 @@ const playVideos = () => {
 const curtain = document.querySelector(".experience09 .play-btn-overlay")
 const devicePlayBtn = curtain.querySelector(".btn")
 
-if (touchDevice) {
-  curtain.classList.remove("hide")
-}
-
 devicePlayBtn.addEventListener("click", () => {
   curtain.classList.add("hide")
-  playVideos()
+  // playVideos()
+  okPlayThem()
 })
