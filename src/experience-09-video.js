@@ -35,6 +35,7 @@ export const addVideos = (meshes) => {
         video.muted = true
         video.loop = true
         video.playsinline = true
+        video.setAttribute("playsinline", true)
         videoObjArr.push(video)
         videoContainer.appendChild(video)
 
