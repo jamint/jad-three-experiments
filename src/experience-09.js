@@ -398,8 +398,6 @@ const devicePlayBtn = curtain.querySelector(".btn")
 
 devicePlayBtn.addEventListener("click", () => {
   curtain.classList.add("hide")
-  // playVideos()
-  // okPlayThem()
   startExperience()
 })
 
@@ -416,10 +414,8 @@ gsap.fromTo(
       gsap.fromTo(
         bgImage,
         { alpha: 1 },
-        { duration: 2, alpha: 0.75, yoyo: true, repeat: -1 }
+        { duration: 2, alpha: 0.4, yoyo: true, repeat: -1 }
       )
     },
   }
 )
-// setTimeout(() => {}, 1500)
-// gsap.fromTo(bgImage, { alpha: 0.5 }, { duration: 2, alpha: 1 })
