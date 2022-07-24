@@ -7,7 +7,16 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader"
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js"
-import { constants, setAssetsLoaded, setThreeScene, getModel, setModel, setOrbitControls, getCamera, setCamera } from "./model"
+import {
+  constants,
+  setAssetsLoaded,
+  setThreeScene,
+  getModel,
+  setModel,
+  setOrbitControls,
+  getCamera,
+  setCamera,
+} from "./model"
 import { createOrbitPositionTestSphere } from "./common/test-sphere"
 
 const showOrbitTestSphere = false,
@@ -59,7 +68,8 @@ const loadingManager = new THREE.LoadingManager(
   (itemUrl, itemsLoaded, itemsTotal) => {
     const progressRatio = itemsLoaded / itemsTotal
     clearInterval(int)
-    document.querySelector(".progress-text").innerHTML = Math.round(progressRatio * 100) + "%"
+    document.querySelector(".progress-text").innerHTML =
+      Math.round(progressRatio * 100) + "%"
   }
 )
 loadingManager.onStart = () => {
@@ -71,7 +81,8 @@ const myTimer = () => {
   if (fakeLodingProgress < 80) {
     if (random === 0) {
       fakeLodingProgress++
-      document.querySelector(".progress-text").innerHTML = fakeLodingProgress + "%"
+      document.querySelector(".progress-text").innerHTML =
+        fakeLodingProgress + "%"
     }
   }
 }
@@ -89,7 +100,11 @@ const init = () => {
   scene = new THREE.Scene()
   setThreeScene(scene)
 
-  renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true })
+  renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    antialias: true,
+    alpha: true,
+  })
   renderer.shadowMap.type = THREE.PCFSoftShadowMap
   renderer.shadowMap.enabled = true
   renderer.shadowMapSoft = true
@@ -101,7 +116,12 @@ const init = () => {
   renderer.toneMappingExposure = envMapExposure
 
   fov = window.innerWidth < 600 ? 45 : 30
-  camera = new THREE.PerspectiveCamera(fov, sizes.width / sizes.height, 0.1, 3000)
+  camera = new THREE.PerspectiveCamera(
+    fov,
+    sizes.width / sizes.height,
+    0.1,
+    3000
+  )
   camera.position.set(camPos[0], camPos[1], camPos[2])
   scene.add(camera)
   setCamera(camera)
@@ -117,19 +137,28 @@ const init = () => {
 }
 
 const loadLights = () => {
-  new RGBELoader().setDataType(THREE.UnsignedByteType).load(HDRbg, function (texture) {
-    const envMap = pmremGenerator.fromEquirectangular(texture).texture
-    scene.environment = envMap
-    texture.dispose()
-    pmremGenerator.dispose()
-    texture.encoding = THREE.RGBEEncoding
-    setTimeout(() => {
-      loadModel()
-    }, 100)
-  })
+  new RGBELoader()
+    .setDataType(THREE.UnsignedByteType)
+    .load(HDRbg, function (texture) {
+      const envMap = pmremGenerator.fromEquirectangular(texture).texture
+      scene.environment = envMap
+      texture.dispose()
+      pmremGenerator.dispose()
+      texture.encoding = THREE.RGBEEncoding
+      setTimeout(() => {
+        loadModel()
+      }, 100)
+    })
 
-  const directional1 = new THREE.DirectionalLight("#ffffff", directionali1Intensity)
-  directional1.position.set(directional1Position[0], directional1Position[1], directional1Position[2])
+  const directional1 = new THREE.DirectionalLight(
+    "#ffffff",
+    directionali1Intensity
+  )
+  directional1.position.set(
+    directional1Position[0],
+    directional1Position[1],
+    directional1Position[2]
+  )
   scene.add(directional1)
 
   let ambient = new THREE.AmbientLight(0xffffff, ambientIntensity)
@@ -155,7 +184,10 @@ const loadModel = () => {
     positions[i] = (Math.random() - 0.5) * 300
   }
 
-  particlesGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3))
+  particlesGeometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(positions, 3)
+  )
   const particlesMaterial = new THREE.PointsMaterial()
   particlesMaterial.size = 0.8
   particlesMaterial.sizeAttenuation = true
@@ -192,7 +224,12 @@ const loadModel = () => {
      * Animation
      */
 
-    gsap.from(getCamera().position, { duration: 2, z: 1000, delay: 0, ease: "power4.out" })
+    gsap.from(getCamera().position, {
+      duration: 2,
+      z: 1000,
+      delay: 0,
+      ease: "power4.out",
+    })
     gsap.fromTo(
       getModel().rotation,
       { y: -0.3 },
@@ -210,7 +247,11 @@ const loadModel = () => {
         },
       }
     )
-    gsap.fromTo(fanMotor.rotation, { y: 1.7 }, { duration: 6, y: 0, yoyo: true, repeat: -1, ease: "none" })
+    gsap.fromTo(
+      fanMotor.rotation,
+      { y: 1.7 },
+      { duration: 6, y: 0, yoyo: true, repeat: -1, ease: "none" }
+    )
 
     if (gltf.animations.length > 0) {
       mixer = new THREE.AnimationMixer(gltf.scene)
