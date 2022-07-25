@@ -409,19 +409,19 @@ devicePlayBtn.addEventListener("click", () => {
 })
 
 const bgImage = document.querySelector(".bg-img")
-// gsap.fromTo(
-//   bgImage,
-//   { alpha: 0 },
-//   {
-//     duration: 2,
-//     alpha: 1,
-//     delay: 1.5,
-//     onComplete: () => {
-//       gsap.fromTo(
-//         bgImage,
-//         { alpha: 1 },
-//         { duration: 2, alpha: 0.4, yoyo: true, repeat: -1 }
-//       )
-//     },
-//   }
-// )
+gsap.fromTo(
+  bgImage,
+  { alpha: 0 },
+  {
+    duration: 2,
+    alpha: 1,
+    delay: 1.5,
+    onComplete: () => {
+      gsap.fromTo(
+        bgImage,
+        { alpha: 1 },
+        { duration: 2, alpha: 0.4, yoyo: true, repeat: -1 }
+      )
+    },
+  }
+)
