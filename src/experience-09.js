@@ -8,6 +8,11 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader"
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js"
 import { addText } from "./scripts/utils/fonts"
+import { addVideos } from "./experience-09-video"
+import { createPointLight } from "./scripts/utils/lights"
+import { touchDevice } from "./common/mobile-detect"
+import { addUnrealBloom } from "./scripts/post-processing"
+
 import {
   constants,
   setAssetsLoaded,
@@ -17,10 +22,8 @@ import {
   setOrbitControls,
   getCamera,
   setCamera,
+  setRenderer,
 } from "./model"
-import { addVideos } from "./experience-09-video"
-import { createPointLight } from "./scripts/utils/lights"
-import { touchDevice } from "./common/mobile-detect"
 
 const textureLoader = new THREE.TextureLoader(),
   directional1Position = [3, 20, 10],
@@ -125,6 +128,7 @@ const init = () => {
   renderer.setClearColor(0xbbdbc1, 0)
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = envMapExposure
+  setRenderer(renderer)
 
   // document.body.appendChild(VRButton.createButton(renderer))
   // renderer.xr.enabled = true
@@ -153,6 +157,8 @@ const init = () => {
   controls.minPolarAngle = minPolarAngle
   controls.maxPolarAngle = maxPolarAngle
   setOrbitControls(controls)
+
+  // addUnrealBloom()
 
   pmremGenerator = new THREE.PMREMGenerator(renderer)
   pmremGenerator.compileEquirectangularShader()
@@ -348,6 +354,7 @@ const tick = () => {
   // modelGroup.rotation.x += (parallaxY - cameraGroup.position.y) * 2 * deltaTime
 
   renderer.render(scene, camera)
+
   window.requestAnimationFrame(tick)
 }
 
@@ -402,20 +409,19 @@ devicePlayBtn.addEventListener("click", () => {
 })
 
 const bgImage = document.querySelector(".bg-img")
-console.log(bgImage)
-gsap.fromTo(
-  bgImage,
-  { alpha: 0 },
-  {
-    duration: 2,
-    alpha: 1,
-    delay: 1.5,
-    onComplete: () => {
-      gsap.fromTo(
-        bgImage,
-        { alpha: 1 },
-        { duration: 2, alpha: 0.4, yoyo: true, repeat: -1 }
-      )
-    },
-  }
-)
+// gsap.fromTo(
+//   bgImage,
+//   { alpha: 0 },
+//   {
+//     duration: 2,
+//     alpha: 1,
+//     delay: 1.5,
+//     onComplete: () => {
+//       gsap.fromTo(
+//         bgImage,
+//         { alpha: 1 },
+//         { duration: 2, alpha: 0.4, yoyo: true, repeat: -1 }
+//       )
+//     },
+//   }
+// )

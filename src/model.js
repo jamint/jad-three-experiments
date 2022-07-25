@@ -8,6 +8,7 @@ const START_EXPERIENCE = "startExperience",
 let currScene = 0,
   isTesting = false,
   modelsArr = [],
+  renderer = null,
   threeScene = null,
   camera = null,
   model = null,
@@ -17,6 +18,13 @@ let currScene = 0,
   guitar = null,
   isMouseOrbitMove = false
 
+export const getRenderer = () => {
+  return renderer
+}
+
+export const setRenderer = (rend) => {
+  renderer = rend
+}
 export const getModel = () => {
   return model
 }
@@ -115,4 +123,9 @@ export const setMouseOrbitMove = (bool) => {
   isMouseOrbitMove = bool
 }
 
-export const constants = { START_EXPERIENCE, SCENE_CHANGED, START_ANIMATION, ASSETS_LOADED }
+export const constants = {
+  START_EXPERIENCE,
+  SCENE_CHANGED,
+  START_ANIMATION,
+  ASSETS_LOADED,
+}
